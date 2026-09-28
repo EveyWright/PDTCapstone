@@ -3,15 +3,15 @@ name: Terraform Deploy
 on:
   workflow_dispatch:
     inputs:
-      action:
-        description: 'Terraform Action to perform'
+      action: 
+        description: 'Action to perform (plan or apply)'
         required: true
-        default: 'apply'
+        default: 'plan'
         type: choice
         options:
           - plan
           - apply
-          - destroy
+        
 
 permissions:
   contents: read
