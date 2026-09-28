@@ -33,11 +33,8 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          creds: >
-            {
-              "subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}",
-              "tenantId":"${{ secrets.TENANT_ID }}"
-            }
+          subscriptionId: "${{ secrets.SUBSCRIPTION_ID }}"
+          tenantId: "${{ secrets.TENANT_ID }}"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
