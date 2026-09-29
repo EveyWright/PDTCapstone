@@ -37,6 +37,7 @@ jobs:
           subscriptionId: "${{ secrets.SUBSCRIPTION_ID }}"
           tenantId: "${{ secrets.TENANT_ID }}"
           clientId: "${{ secrets.CLIENT_ID }}"
+          objectId: "${{ secrets.OBJECT_ID }}"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
