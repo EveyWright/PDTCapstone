@@ -1,5 +1,5 @@
 data "azurerm_resource_group" "capstone" {
-  name     = var.resource_group_name
+  name = var.resource_group_name
 }
 
 resource "azuread_application" "github_actions" {
