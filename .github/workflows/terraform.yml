@@ -38,6 +38,7 @@ jobs:
           client-id: "${{ secrets.CLIENT_ID }}"
           object-id: "${{ secrets.OBJECT_ID }}"
           client-secret: "${{ secrets.CLIENT_SECRET }}"
+          authentication-method: 'OIDC'
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
