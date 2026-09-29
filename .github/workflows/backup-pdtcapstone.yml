@@ -32,7 +32,7 @@ jobs:
         uses: microsoft/powerplatform-actions/unpack-solution@v1
         with:
           solution-file: PDTCapstone_solution.zip
-          solution-folder: src/solution
+          solution-folder: solutions
 
       - name: Commit Changes
         run: |
