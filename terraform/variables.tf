@@ -6,10 +6,6 @@ variable "location" {
   default = "eastus"
 }
 
-variable "key_vault_name" {
-  default = "kv-capstone-devops"
-}
-
 variable "team_member_upns" {
   type = list(string)
 
