@@ -33,7 +33,6 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          authentication-method: 'service-principal'
           subscriptionId: "${{ secrets.SUBSCRIPTION_ID }}"
           tenantId: "${{ secrets.TENANT_ID }}"
           clientId: "${{ secrets.CLIENT_ID }}"
