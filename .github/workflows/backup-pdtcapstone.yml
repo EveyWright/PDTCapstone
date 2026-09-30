@@ -17,6 +17,10 @@ jobs:
       - name: Install Power Platform Tools
         uses: microsoft/powerplatform-actions/actions-install@v1
 
+      - name: List Solutions
+        run: |
+            pac solution list
+
       - name: Export Solution
         uses: microsoft/powerplatform-actions/export-solution@v1
         with:
@@ -27,7 +31,7 @@ jobs:
 
           solution-name: pdt_PDTCapstone
           solution-output-file: PDTCapstone_solution.zip
-
+          
       - name: Unpack Solution
         uses: microsoft/powerplatform-actions/unpack-solution@v1
         with:
