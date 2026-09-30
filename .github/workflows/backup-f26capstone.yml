@@ -1,4 +1,4 @@
-name: Backup PDTCapstone Solution
+name: Backup F26Capstone Solution
 
 on:
   workflow_dispatch:
@@ -20,18 +20,18 @@ jobs:
       - name: Export Solution
         uses: microsoft/powerplatform-actions/export-solution@v1
         with:
-          environment-url: ${{ secrets.PDTCAPSTONE_URL}}
+          environment-url: ${{ secrets.PDTCapstone_URL}}
           app-id: ${{ secrets.ACTIONS_CLIENT_ID }}
           client-secret: ${{ secrets.ACTIONS_CLIENT_SECRET }}
           tenant-id: ${{ secrets.TENANT_ID }}
 
-          solution-name: pdt_PDTCapstone
-          solution-output-file: PDTCapstone_solution.zip
+          solution-name: F26Capstone
+          solution-output-file: F26Capstone_solution.zip
           
       - name: Unpack Solution
         uses: microsoft/powerplatform-actions/unpack-solution@v1
         with:
-          solution-file: PDTCapstone_solution.zip
+          solution-file: F26Capstone_solution.zip
           solution-folder: solutions
 
       - name: Commit Changes
