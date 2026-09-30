@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="business_unit_f26c_disruptionimages" />
+  <EntityRelationship Name="business_unit_f26c_disruptiontickets" />
+  <EntityRelationship Name="lk_f26c_disruptionimages_createdby" />
+  <EntityRelationship Name="lk_f26c_disruptionimages_modifiedby" />
+  <EntityRelationship Name="lk_f26c_disruptiontickets_createdby" />
+  <EntityRelationship Name="lk_f26c_disruptiontickets_modifiedby" />
+  <EntityRelationship Name="owner_f26c_disruptionimages" />
+  <EntityRelationship Name="owner_f26c_disruptiontickets" />
+  <EntityRelationship Name="team_f26c_disruptionimages" />
+  <EntityRelationship Name="team_f26c_disruptiontickets" />
+  <EntityRelationship Name="user_f26c_disruptionimages" />
+  <EntityRelationship Name="user_f26c_disruptiontickets" />
+</EntityRelationships>

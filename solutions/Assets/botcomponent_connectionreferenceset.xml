@@ -1,0 +1,5 @@
+<botcomponent_connectionreferenceset>
+  <botcomponent_connectionreference botcomponentid.schemaname="cr36f_phil_eB7BM0.tool.Addanewrowtoselectedenvironment_1ML" connectionreferenceid.connectionreferencelogicalname="cr36f_phil_eB7BM0.cr.shared_commondataserviceforapps.99645add-b9a7-436f-b170-61b1e4c789c2">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+</botcomponent_connectionreferenceset>
