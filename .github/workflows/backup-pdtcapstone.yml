@@ -25,7 +25,7 @@ jobs:
           client-secret: ${{ secrets.ACTIONS_CLIENT_SECRET }}
           tenant-id: ${{ secrets.TENANT_ID }}
 
-          solution-name: PDTCapstone
+          solution-name: pdt_PDTCapstone
           solution-output-file: PDTCapstone_solution.zip
 
       - name: Unpack Solution
