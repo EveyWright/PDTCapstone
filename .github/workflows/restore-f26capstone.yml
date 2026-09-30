@@ -1,4 +1,4 @@
-name: Restore F26Capstone Solution
+name: Restore F26Capstone
 
 on:
   workflow_dispatch:
@@ -13,12 +13,6 @@ jobs:
 
       - name: Install Power Platform Tools
         uses: microsoft/powerplatform-actions/actions-install@v1
-
-      - name: Pack Solution
-        uses: microsoft/powerplatform-actions/pack-solution@v1
-        with:
-          solution-folder: solutions
-          solution-file: F26Capstone_solution.zip
 
       - name: Import Solution
         uses: microsoft/powerplatform-actions/import-solution@v1
