@@ -16,7 +16,13 @@ jobs:
 
       - name: Install Power Platform Tools
         uses: microsoft/powerplatform-actions/actions-install@v1
-
+        
+      - name: Remove Old Backup
+        run: |
+          if [ -f F26Capstone_solution.zip ]; then
+            rm F26Capstone_solution.zip
+          fi
+      
       - name: Export Solution
         uses: microsoft/powerplatform-actions/export-solution@v1
         with:
