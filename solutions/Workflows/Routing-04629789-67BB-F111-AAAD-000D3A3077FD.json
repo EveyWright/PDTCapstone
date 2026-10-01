@@ -1,0 +1,160 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_38a62"
+        },
+        "runtimeSource": "embedded"
+      },
+      "shared_teams": {
+        "api": {
+          "name": "shared_teams"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedteams_19643"
+        },
+        "runtimeSource": "embedded"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_a_row_is_added,_modified_or_deleted": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "f26c_disruptiontickets",
+              "subscriptionRequest/scope": 4
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          }
+        }
+      },
+      "actions": {
+        "Get_a_row_by_ID": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_disruptionticketses",
+              "recordId": "@triggerOutputs()?['body/f26c_disruptionticketsid']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "GetItem",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {}
+        },
+        "Post_adaptive_card_and_wait_for_a_response": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "parameters": {
+              "poster": "Flow bot",
+              "location": "Group chat",
+              "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"New issue reported\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_a_row_by_ID')?['body/f26c_friendlyid']}\", \"wrap\": true }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"I'll take this\", \"data\": { \"action\": \"claim\" } }\n  ]\n}",
+              "body/body/updateMessage": "This issue has been claimed.",
+              "body/body/recipient/recipient": "19:fada0b28de584be0a632ecec0e924bc3@thread.v2"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+              "operationId": "PostCardAndWaitForResponse",
+              "connectionName": "shared_teams"
+            }
+          },
+          "runAfter": {
+            "Get_a_row_by_ID": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Update_a_row": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_disruptionticketses",
+              "recordId": "@outputs('Get_a_row_by_ID')?['body/f26c_disruptionticketsid']",
+              "item/f26c_status": 751610001,
+              "item/f26c_responder": "@outputs('Post_adaptive_card_and_wait_for_a_response')?['body/responder/displayName']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "UpdateOnlyRecord",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "Post_adaptive_card_and_wait_for_a_response": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Post_adaptive_card_and_wait_for_a_response_1": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "parameters": {
+              "poster": "Flow bot",
+              "location": "Chat with Flow bot",
+              "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"You claimed this issue: @{outputs('Update_a_row')?['body/f26c_friendlyid']}\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"Summary: @{outputs('Update_a_row')?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"Input.Text\", \"id\": \"resolutionNotes\", \"placeholder\": \"What was done to fix it? (optional)\", \"isMultiline\": true }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Mark resolved\", \"data\": { \"action\": \"resolve\" } }\n  ]\n}",
+              "body/body/updateMessage": "Thanks for solving the issue!",
+              "body/body/recipient/to": "@outputs('Post_adaptive_card_and_wait_for_a_response')?['body/responder/email']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+              "operationId": "PostCardAndWaitForResponse",
+              "connectionName": "shared_teams"
+            }
+          },
+          "runAfter": {
+            "Update_a_row": [
+              "SUCCEEDED"
+            ]
+          }
+        },
+        "Update_a_row_1": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_disruptionticketses",
+              "recordId": "@outputs('Update_a_row')?['body/f26c_disruptionticketsid']",
+              "item/f26c_status": 751610003
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "UpdateOnlyRecord",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "Post_adaptive_card_and_wait_for_a_response_1": [
+              "SUCCEEDED"
+            ]
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}
