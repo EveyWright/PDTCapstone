@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{0f5c6930-f898-442a-b6af-956c9a36ce34}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{6100B78B-1B07-44C8-A511-980A1F00D276}" IsUserDefined="1">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{AAA2884E-9A02-40B2-BCBE-D49F691948FC}">
+                  <labels>
+                    <label description="General" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{1CE62E72-68CD-4A35-9D88-6F918327C1F0}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_id" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="f26c_ID" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{E7B4AA0A-C410-41FE-AA48-C4C7DD3711A2}">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{f571c60b-4b5a-4f09-ac60-823961fb4554}">
+                        <labels>
+                          <label description="Name" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_name" classid="{4273edbd-ac1d-40d3-9fb2-095c621b552d}" datafieldname="f26c_name" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c5ade90f-7669-46f4-89a4-2e39adac849c}">
+                        <labels>
+                          <label description="Email" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_email" classid="{4273edbd-ac1d-40d3-9fb2-095c621b552d}" datafieldname="f26c_email" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{59e68ad9-b924-4c76-b2d4-b732bf32fb48}">
+                        <labels>
+                          <label description="Department" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_department" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="f26c_department" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

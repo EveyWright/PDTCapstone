@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{703cc19b-f657-4907-a8f8-c81662cd4e7e}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="f26c_id" select="1" icon="1" preview="1">
+        <row name="result" id="f26c_ticketid">
+          <cell name="f26c_id" width="300" />
+          <cell name="f26c_title" width="150" />
+          <cell name="f26c_summary" width="150" />
+          <cell name="f26c_status" width="150" />
+          <cell name="f26c_severity" width="150" />
+          <cell name="f26c_department" width="150" />
+          <cell name="f26c_createdon" width="150" />
+          <cell name="f26c_createdby" width="150" />
+          <cell name="f26c_resolvedon" width="150" />
+          <cell name="f26c_assignedto" width="150" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="f26c_ticket">
+          <attribute name="f26c_ticketid" />
+          <attribute name="f26c_id" />
+          <attribute name="createdon" />
+          <order attribute="f26c_id" descending="false" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+          <attribute name="f26c_title" />
+          <attribute name="f26c_summary" />
+          <attribute name="f26c_status" />
+          <attribute name="f26c_severity" />
+          <attribute name="f26c_department" />
+          <attribute name="f26c_createdon" />
+          <attribute name="f26c_createdby" />
+          <attribute name="f26c_resolvedon" />
+          <attribute name="f26c_assignedto" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active Tickets" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

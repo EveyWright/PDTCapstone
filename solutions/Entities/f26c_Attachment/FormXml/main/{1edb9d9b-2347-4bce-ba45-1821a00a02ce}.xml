@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{1edb9d9b-2347-4bce-ba45-1821a00a02ce}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{0F628C4C-7397-4B3A-BE53-F1D895A412E0}" IsUserDefined="1">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{2A7011E2-3B50-4DCE-8C1A-ADD9B591F1D1}">
+                  <labels>
+                    <label description="General" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{C13E1578-A184-4F43-81AF-B2383C8AA33A}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_id" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="f26c_ID" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{4A52CBB3-ADEF-482E-B56A-850EE2FF79CC}">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8a1eb365-be38-4e5a-bbe6-6eb41703effc}">
+                        <labels>
+                          <label description="TicketID" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_ticketid" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="f26c_ticketid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{26d568a9-74d6-4479-95e2-22c1552a53b1}">
+                        <labels>
+                          <label description="FileType" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_filetype" classid="{4273edbd-ac1d-40d3-9fb2-095c621b552d}" datafieldname="f26c_filetype" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1c660bba-7073-4114-b643-8a50c246a514}">
+                        <labels>
+                          <label description="UploadedBy" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_uploadedby" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="f26c_uploadedby" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9a57da50-49ee-4d2d-83ff-eb898a929492}">
+                        <labels>
+                          <label description="UploadedOn" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_uploadedon" classid="{5b773807-9fb2-42db-97c3-7a91eff8adff}" datafieldname="f26c_uploadedon" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

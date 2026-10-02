@@ -78,8 +78,13 @@
       </Addresses>
     </Publisher>
     <RootComponents>
+      <RootComponent type="1" schemaName="f26c_attachment" behavior="0" />
+      <RootComponent type="1" schemaName="f26c_department" behavior="0" />
       <RootComponent type="1" schemaName="f26c_disruptionimages" behavior="0" />
       <RootComponent type="1" schemaName="f26c_disruptiontickets" behavior="0" />
+      <RootComponent type="1" schemaName="f26c_employee" behavior="0" />
+      <RootComponent type="1" schemaName="f26c_ticket" behavior="0" />
+      <RootComponent type="1" schemaName="f26c_ticketupdate" behavior="0" />
       <RootComponent type="29" id="{04629789-67bb-f111-aaad-000d3a3077fd}" behavior="0" />
       <RootComponent type="431" schemaName="f26c_disruptionimages f26c_image" behavior="0" />
       <RootComponent type="432" schemaName="f26c_disruptionimages" behavior="0" />
