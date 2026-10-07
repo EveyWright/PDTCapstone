@@ -15,6 +15,7 @@
   <EntityRelationship Name="f26c_ticket_Department_f26c_department" />
   <EntityRelationship Name="f26c_ticketupdate_TicketID_f26c_ticket" />
   <EntityRelationship Name="f26c_ticketupdate_UpdatedBy_f26c_employee" />
+  <EntityRelationship Name="FileAttachment_f26c_Attachment_f26c_Files" />
   <EntityRelationship Name="lk_f26c_attachment_createdby" />
   <EntityRelationship Name="lk_f26c_attachment_modifiedby" />
   <EntityRelationship Name="lk_f26c_department_createdby" />
