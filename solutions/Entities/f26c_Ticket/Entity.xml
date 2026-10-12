@@ -471,7 +471,7 @@
           <IsFilterable>0</IsFilterable>
           <IsRetrievable>0</IsRetrievable>
           <IsLocalizable>0</IsLocalizable>
-          <AppDefaultValue>751610001</AppDefaultValue>
+          <AppDefaultValue>751610000</AppDefaultValue>
           <optionset Name="f26c_ticket_f26c_status">
             <OptionSetType>picklist</OptionSetType>
             <IntroducedVersion>1.0</IntroducedVersion>
@@ -486,7 +486,7 @@
             <options>
               <option value="751610000" ExternalValue="" IsHidden="0">
                 <labels>
-                  <label description="Created" languagecode="1033" />
+                  <label description="New" languagecode="1033" />
                 </labels>
                 <Descriptions>
                   <Description description="" languagecode="1033" />
@@ -510,7 +510,7 @@
               </option>
               <option value="751610003" ExternalValue="" IsHidden="0">
                 <labels>
-                  <label description="Blocked" languagecode="1033" />
+                  <label description="Skip" languagecode="1033" />
                 </labels>
                 <Descriptions>
                   <Description description="" languagecode="1033" />
