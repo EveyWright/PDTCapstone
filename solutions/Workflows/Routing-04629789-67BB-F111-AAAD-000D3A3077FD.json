@@ -2,245 +2,226 @@
   "properties": {
     "connectionReferences": {
       "shared_commondataserviceforapps": {
-        "runtimeSource": "embedded",
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
         "connection": {
           "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_38a62"
         },
-        "api": {
-          "name": "shared_commondataserviceforapps"
-        }
+        "runtimeSource": "embedded"
       },
       "shared_teams": {
-        "runtimeSource": "embedded",
+        "api": {
+          "name": "shared_teams"
+        },
         "connection": {
           "connectionReferenceLogicalName": "new_sharedteams_19643"
         },
-        "api": {
-          "name": "shared_teams"
-        }
+        "runtimeSource": "embedded"
       }
     },
     "definition": {
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "contentVersion": "1.0.0.0",
       "parameters": {
-        "$connections": {
-          "defaultValue": {},
-          "type": "Object"
-        },
         "$authentication": {
           "defaultValue": {},
           "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
         }
       },
       "triggers": {
         "When_a_row_is_added,_modified_or_deleted": {
-          "metadata": {
-            "operationMetadataId": "c0a6b180-ff60-4451-bbcf-f1bfdc087d9f"
-          },
           "type": "OpenApiConnectionWebhook",
           "inputs": {
             "parameters": {
               "subscriptionRequest/message": 1,
-              "subscriptionRequest/entityname": "f26c_disruptiontickets",
+              "subscriptionRequest/entityname": "f26c_ticket",
               "subscriptionRequest/scope": 4,
               "subscriptionRequest/name": "04629789-67bb-f111-aaad-000d3a3077fd"
             },
             "host": {
-              "connectionName": "shared_commondataserviceforapps",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "SubscribeWebhookTrigger",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-            },
-            "authentication": "@parameters('$authentication')"
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "metadata": {
+            "operationMetadataId": "c0a6b180-ff60-4451-bbcf-f1bfdc087d9f"
           }
         }
       },
       "actions": {
         "Get_a_row_by_ID": {
-          "runAfter": {},
-          "metadata": {
-            "operationMetadataId": "4f625d32-32a4-4f35-82ae-1f6452a9bb71"
-          },
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
-              "entityName": "f26c_disruptionticketses",
-              "recordId": "@triggerOutputs()?['body/f26c_disruptionticketsid']"
+              "entityName": "f26c_tickets",
+              "recordId": "@triggerOutputs()?['body/f26c_ticketid']"
             },
             "host": {
-              "connectionName": "shared_commondataserviceforapps",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "GetItem",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-            },
-            "authentication": "@parameters('$authentication')"
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "4f625d32-32a4-4f35-82ae-1f6452a9bb71"
           }
         },
-        "Post_adaptive_card_and_wait_for_a_response": {
-          "runAfter": {
-            "Get_a_row_by_ID": [
-              "Succeeded"
-            ]
-          },
-          "metadata": {
-            "operationMetadataId": "99b91fb2-d5e4-40b3-8342-144cfe4c8e9b"
-          },
+        "Claim_card": {
           "type": "OpenApiConnectionWebhook",
           "inputs": {
             "parameters": {
               "poster": "Flow bot",
               "location": "Group chat",
-              "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"New issue reported\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_a_row_by_ID')?['body/f26c_friendlyid']}\", \"wrap\": true }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"I'll take this\", \"data\": { \"action\": \"claim\" } }\n  ]\n}",
-              "body/body/updateMessage": "This issue has been claimed.",
+              "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"New issue reported!\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_a_row_by_ID')?['body/f26c_id']}\", \"wrap\": true },\n{ \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_a_row_by_ID')?['body/f26c_title']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Summary of issue: @{outputs('Get_a_row_by_ID')?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Est. Severity: @{outputs('Get_a_row_by_ID')?['body/cr36f_severitylmh']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Recommended Department: @{outputs('Get_department')?['body/f26c_name']}\", \"wrap\": true}\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Take Ticket\", \"data\": { \"action\": \"claim\" } }\n  ]\n}",
+              "body/body/updateMessage": "@{outputs('Get_a_row_by_ID')?['body/f26c_id']} has been claimed.",
               "body/body/recipient/recipient": "19:fada0b28de584be0a632ecec0e924bc3@thread.v2"
             },
             "host": {
-              "connectionName": "shared_teams",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
               "operationId": "PostCardAndWaitForResponse",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
-            },
-            "authentication": "@parameters('$authentication')"
+              "connectionName": "shared_teams"
+            }
+          },
+          "runAfter": {
+            "Get_department": [
+              "SUCCEEDED"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "99b91fb2-d5e4-40b3-8342-144cfe4c8e9b"
           }
         },
         "Update_a_row": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_tickets",
+              "recordId": "@outputs('Get_a_row_by_ID')?['body/f26c_ticketid']",
+              "item/f26c_status": 751610001,
+              "item/f26c_AssignedTo@odata.bind": "@concat('f26c_employees(', first(outputs('List_rows')?['body/value'])?['f26c_employeeid'], ')')"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "UpdateOnlyRecord",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
           "runAfter": {
-            "Post_adaptive_card_and_wait_for_a_response": [
+            "List_rows": [
               "Succeeded"
             ]
           },
           "metadata": {
             "operationMetadataId": "3d113a03-01bf-45d7-aad5-b68c1eb9d0c0"
-          },
-          "type": "OpenApiConnection",
-          "inputs": {
-            "parameters": {
-              "entityName": "f26c_disruptionticketses",
-              "recordId": "@outputs('Get_a_row_by_ID')?['body/f26c_disruptionticketsid']",
-              "item/f26c_status": 751610001,
-              "item/f26c_responder": "@outputs('Post_adaptive_card_and_wait_for_a_response')?['body/responder/displayName']"
-            },
-            "host": {
-              "connectionName": "shared_commondataserviceforapps",
-              "operationId": "UpdateOnlyRecord",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-            },
-            "authentication": "@parameters('$authentication')"
           }
         },
         "Switch": {
+          "type": "Switch",
+          "expression": "@variables('action')",
+          "default": {
+            "actions": {
+              "Terminate": {
+                "type": "Terminate",
+                "inputs": {
+                  "runStatus": "Failed"
+                },
+                "metadata": {
+                  "operationMetadataId": "79a0d2f6-0a0f-49f2-8a6e-bcb53a0fcb7e"
+                }
+              }
+            }
+          },
+          "cases": {
+            "Case": {
+              "actions": {
+                "Update_a_row_1": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "entityName": "f26c_tickets",
+                      "recordId": "@outputs('Get_a_row_by_ID')?['body/f26c_ticketid']",
+                      "item/f26c_status": 751610002,
+                      "item/f26c_worknotes": "@variables('notes')"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                      "operationId": "UpdateOnlyRecord",
+                      "connectionName": "shared_commondataserviceforapps"
+                    }
+                  },
+                  "metadata": {
+                    "operationMetadataId": "7f9203fe-1e2a-4d90-b652-3f014758fe8c"
+                  }
+                }
+              },
+              "case": "resolve"
+            },
+            "Case 2": {
+              "actions": {
+                "Update_a_row_2": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "entityName": "f26c_tickets",
+                      "recordId": "@outputs('Get_a_row_by_ID')?['body/f26c_ticketid']",
+                      "item/f26c_status": 751610003,
+                      "item/f26c_worknotes": "@variables('notes')"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                      "operationId": "UpdateOnlyRecord",
+                      "connectionName": "shared_commondataserviceforapps"
+                    }
+                  },
+                  "metadata": {
+                    "operationMetadataId": "1fbb161b-038e-4c70-9022-742a38d6c606"
+                  }
+                }
+              },
+              "case": "skip"
+            },
+            "Case 3": {
+              "actions": {
+                "Update_a_row_3": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "entityName": "f26c_tickets",
+                      "recordId": "@outputs('Get_a_row_by_ID')?['body/f26c_ticketid']",
+                      "item/f26c_status": 751610001,
+                      "item/f26c_worknotes": "@variables('notes')"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                      "operationId": "UpdateOnlyRecord",
+                      "connectionName": "shared_commondataserviceforapps"
+                    }
+                  },
+                  "metadata": {
+                    "operationMetadataId": "e28cdc16-0cb2-4615-a307-ff529bc42d0e"
+                  }
+                }
+              },
+              "case": "transfer"
+            }
+          },
           "runAfter": {
             "Do_until": [
               "Succeeded"
             ]
           },
-          "cases": {
-            "Case": {
-              "case": "resolve",
-              "actions": {
-                "Update_a_row_1": {
-                  "runAfter": {},
-                  "metadata": {
-                    "operationMetadataId": "7f9203fe-1e2a-4d90-b652-3f014758fe8c"
-                  },
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "parameters": {
-                      "entityName": "f26c_disruptionticketses",
-                      "recordId": "@outputs('Update_a_row')?['body/f26c_disruptionticketsid']",
-                      "item/f26c_status": 751610003,
-                      "item/f26c_worknotes": "@variables('notes')"
-                    },
-                    "host": {
-                      "connectionName": "shared_commondataserviceforapps",
-                      "operationId": "UpdateOnlyRecord",
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-                    },
-                    "authentication": "@parameters('$authentication')"
-                  }
-                }
-              }
-            },
-            "Case 2": {
-              "case": "skip",
-              "actions": {
-                "Update_a_row_2": {
-                  "runAfter": {},
-                  "metadata": {
-                    "operationMetadataId": "1fbb161b-038e-4c70-9022-742a38d6c606"
-                  },
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "parameters": {
-                      "entityName": "f26c_disruptionticketses",
-                      "recordId": "@outputs('Get_a_row_by_ID')?['body/f26c_disruptionticketsid']",
-                      "item/f26c_status": 751610002,
-                      "item/f26c_worknotes": "@variables('notes')"
-                    },
-                    "host": {
-                      "connectionName": "shared_commondataserviceforapps",
-                      "operationId": "UpdateOnlyRecord",
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-                    },
-                    "authentication": "@parameters('$authentication')"
-                  }
-                }
-              }
-            },
-            "Case 3": {
-              "case": "transfer",
-              "actions": {
-                "Update_a_row_3": {
-                  "runAfter": {},
-                  "metadata": {
-                    "operationMetadataId": "e28cdc16-0cb2-4615-a307-ff529bc42d0e"
-                  },
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "parameters": {
-                      "entityName": "f26c_disruptionticketses",
-                      "recordId": "@outputs('Get_a_row_by_ID')?['body/f26c_disruptionticketsid']",
-                      "item/f26c_status": 751610001,
-                      "item/f26c_worknotes": "@variables('notes')"
-                    },
-                    "host": {
-                      "connectionName": "shared_commondataserviceforapps",
-                      "operationId": "UpdateOnlyRecord",
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-                    },
-                    "authentication": "@parameters('$authentication')"
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "actions": {
-              "Terminate": {
-                "runAfter": {},
-                "metadata": {
-                  "operationMetadataId": "79a0d2f6-0a0f-49f2-8a6e-bcb53a0fcb7e"
-                },
-                "type": "Terminate",
-                "inputs": {
-                  "runStatus": "Failed"
-                }
-              }
-            }
-          },
-          "expression": "@variables('action')",
           "metadata": {
             "operationMetadataId": "85f653f4-2e7b-4d19-b72c-73f669f2431a"
-          },
-          "type": "Switch"
+          }
         },
         "Initialize_variable": {
-          "runAfter": {
-            "Update_a_row": [
-              "Succeeded"
-            ]
-          },
-          "metadata": {
-            "operationMetadataId": "ebbb132d-def9-4207-ba3a-415ad826215d"
-          },
           "type": "InitializeVariable",
           "inputs": {
             "variables": [
@@ -250,9 +231,26 @@
                 "value": false
               }
             ]
+          },
+          "runAfter": {
+            "Add_a_new_row": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "ebbb132d-def9-4207-ba3a-415ad826215d"
           }
         },
         "Initialize_variable_1": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "action",
+                "type": "string"
+              }
+            ]
+          },
           "runAfter": {
             "Initialize_variable": [
               "Succeeded"
@@ -260,18 +258,18 @@
           },
           "metadata": {
             "operationMetadataId": "36242b0b-f568-48f9-b06f-fca5984a156b"
-          },
+          }
+        },
+        "Initialize_variable_2": {
           "type": "InitializeVariable",
           "inputs": {
             "variables": [
               {
-                "name": "action",
+                "name": "notes",
                 "type": "string"
               }
             ]
-          }
-        },
-        "Initialize_variable_2": {
+          },
           "runAfter": {
             "Initialize_variable_1": [
               "Succeeded"
@@ -279,18 +277,18 @@
           },
           "metadata": {
             "operationMetadataId": "ee443fa8-f9d4-490b-a08a-b2a6d187936b"
-          },
+          }
+        },
+        "Initialize_variable_3": {
           "type": "InitializeVariable",
           "inputs": {
             "variables": [
               {
-                "name": "notes",
+                "name": "department",
                 "type": "string"
               }
             ]
-          }
-        },
-        "Initialize_variable_3": {
+          },
           "runAfter": {
             "Initialize_variable_2": [
               "Succeeded"
@@ -298,18 +296,18 @@
           },
           "metadata": {
             "operationMetadataId": "6f460964-cf8b-4b22-b2c1-180d54b629d1"
-          },
+          }
+        },
+        "Initialize_variable_4": {
           "type": "InitializeVariable",
           "inputs": {
             "variables": [
               {
-                "name": "department",
+                "name": "responderName",
                 "type": "string"
               }
             ]
-          }
-        },
-        "Initialize_variable_4": {
+          },
           "runAfter": {
             "Initialize_variable_3": [
               "Succeeded"
@@ -317,18 +315,18 @@
           },
           "metadata": {
             "operationMetadataId": "125350cf-7071-4c98-bac2-54a55fc3ce00"
-          },
+          }
+        },
+        "Initialize_variable_5": {
           "type": "InitializeVariable",
           "inputs": {
             "variables": [
               {
-                "name": "responderName",
+                "name": "errorMessage",
                 "type": "string"
               }
             ]
-          }
-        },
-        "Initialize_variable_5": {
+          },
           "runAfter": {
             "Initialize_variable_4": [
               "Succeeded"
@@ -336,24 +334,17 @@
           },
           "metadata": {
             "operationMetadataId": "eacad97e-858a-4a1c-9be9-f9f72af2d494"
-          },
-          "type": "InitializeVariable",
-          "inputs": {
-            "variables": [
-              {
-                "name": "errorMessage",
-                "type": "string"
-              }
-            ]
           }
         },
         "Do_until": {
+          "type": "Until",
+          "expression": "@equals(variables('isValid'),true)",
+          "limit": {
+            "count": 5,
+            "timeout": "P7D"
+          },
           "actions": {
-            "Claim_card": {
-              "runAfter": {},
-              "metadata": {
-                "operationMetadataId": "ddb89d67-7809-4045-8d2b-bef3d928dc12"
-              },
+            "Response_card": {
               "type": "OpenApiConnectionWebhook",
               "inputs": {
                 "parameters": {
@@ -361,32 +352,39 @@
                   "location": "Chat with Flow bot",
                   "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_a_row_by_ID')?['body/f26c_friendlyid']}\", \"color\": \"Attention\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"You claimed this issue\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_a_row_by_ID')?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"Input.Text\", \"id\": \"notes\", \"label\": \"Work notes (required)\", \"placeholder\": \"What was done, why you're skipping, or why you're transferring\", \"isMultiline\": true },\n    {\n      \"type\": \"Input.ChoiceSet\",\n      \"id\": \"department\",\n      \"label\": \"Transfer to (only for Transfer)\",\n      \"placeholder\": \"Select a department\",\n      \"choices\": [\n        { \"title\": \"IT\", \"value\": \"IT\" },\n        { \"title\": \"Facilities\", \"value\": \"Facilities\" },\n        { \"title\": \"HR\", \"value\": \"HR\" }\n      ]\n    }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Mark resolved\", \"data\": { \"action\": \"resolve\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Skip\", \"data\": { \"action\": \"skip\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Transfer\", \"data\": { \"action\": \"transfer\" } }\n  ]\n}",
                   "body/body/updateMessage": "Thank you for looking into the issue!",
-                  "body/body/recipient/to": "@outputs('Post_adaptive_card_and_wait_for_a_response')?['body/responder/email']"
+                  "body/body/recipient/to": "@outputs('Claim_card')?['body/responder/email']"
                 },
                 "host": {
-                  "connectionName": "shared_teams",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
                   "operationId": "PostCardAndWaitForResponse",
-                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
-                },
-                "authentication": "@parameters('$authentication')"
+                  "connectionName": "shared_teams"
+                }
+              },
+              "metadata": {
+                "operationMetadataId": "ddb89d67-7809-4045-8d2b-bef3d928dc12"
               }
             },
             "Set_variable": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "action",
+                "value": "@coalesce(outputs('Response_card')?['body/data/action'], '')"
+              },
               "runAfter": {
-                "Claim_card": [
+                "Response_card": [
                   "Succeeded"
                 ]
               },
               "metadata": {
                 "operationMetadataId": "f7530f2a-35d2-490c-9468-fce0035874ad"
-              },
-              "type": "SetVariable",
-              "inputs": {
-                "name": "action",
-                "value": "@coalesce(outputs('Claim_card')?['body/data/action'], '')"
               }
             },
             "Set_variable_1": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "notes",
+                "value": "@coalesce(outputs('Response_card')?['body/data/notes'], '')"
+              },
               "runAfter": {
                 "Set_variable": [
                   "Succeeded"
@@ -394,14 +392,14 @@
               },
               "metadata": {
                 "operationMetadataId": "60ab7e5d-482a-4cc5-b5af-c066a3ac53bd"
-              },
-              "type": "SetVariable",
-              "inputs": {
-                "name": "notes",
-                "value": "@coalesce(outputs('Claim_card')?['body/data/notes'], '')"
               }
             },
             "Set_variable_2": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "department",
+                "value": "@coalesce(outputs('Response_card')?['body/data/department'], '')"
+              },
               "runAfter": {
                 "Set_variable_1": [
                   "Succeeded"
@@ -409,14 +407,14 @@
               },
               "metadata": {
                 "operationMetadataId": "c8984f02-e8e2-47eb-8958-9b651e06ecd3"
-              },
-              "type": "SetVariable",
-              "inputs": {
-                "name": "department",
-                "value": "@coalesce(outputs('Claim_card')?['body/data/department'], '')"
               }
             },
             "Set_variable_3": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "responderName",
+                "value": "@outputs('Response_card')?['body/responder/displayName']"
+              },
               "runAfter": {
                 "Set_variable_2": [
                   "Succeeded"
@@ -424,14 +422,14 @@
               },
               "metadata": {
                 "operationMetadataId": "31f4c1a0-1372-473d-990a-3c71de46a84e"
-              },
-              "type": "SetVariable",
-              "inputs": {
-                "name": "responderName",
-                "value": "@outputs('Claim_card')?['body/responder/displayName']"
               }
             },
             "Set_variable_4": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "isValid",
+                "value": "@and(\r\n  not(empty(trim(variables('notes')))),\r\n  or(\r\n    not(equals(variables('action'), 'transfer')),\r\n    not(empty(variables('department')))\r\n  )\r\n)"
+              },
               "runAfter": {
                 "Set_variable_3": [
                   "Succeeded"
@@ -439,14 +437,14 @@
               },
               "metadata": {
                 "operationMetadataId": "f7e3b0ef-1862-4270-8cf8-f79b5304842c"
-              },
-              "type": "SetVariable",
-              "inputs": {
-                "name": "isValid",
-                "value": "@and(\r\n  not(empty(trim(variables('notes')))),\r\n  or(\r\n    not(equals(variables('action'), 'transfer')),\r\n    not(empty(variables('department')))\r\n  )\r\n)"
               }
             },
             "Set_variable_5": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "errorMessage",
+                "value": "@if(variables('isValid'), '', 'Please add notes, and choose a department if you are transferring. Then try again.')"
+              },
               "runAfter": {
                 "Set_variable_4": [
                   "Succeeded"
@@ -454,11 +452,6 @@
               },
               "metadata": {
                 "operationMetadataId": "e9702769-68df-4928-a945-3739745c8126"
-              },
-              "type": "SetVariable",
-              "inputs": {
-                "name": "errorMessage",
-                "value": "@if(variables('isValid'), '', 'Please add notes, and choose a department if you are transferring. Then try again.')"
               }
             }
           },
@@ -467,20 +460,76 @@
               "Succeeded"
             ]
           },
-          "expression": "@equals(variables('isValid'),true)",
-          "limit": {
-            "count": 5,
-            "timeout": "P7D"
-          },
           "metadata": {
             "operationMetadataId": "72102c7d-de74-47eb-9b14-494873b96148"
+          }
+        },
+        "List_rows": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_employees",
+              "$filter": "f26c_email eq '@{outputs('Claim_card')?['body/responder/userPrincipalName']}'",
+              "$top": 1
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "connectionName": "shared_commondataserviceforapps"
+            }
           },
-          "type": "Until"
+          "runAfter": {
+            "Claim_card": [
+              "SUCCEEDED"
+            ]
+          }
+        },
+        "Get_department": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_departments",
+              "recordId": "@outputs('Get_a_row_by_ID')?['body/_f26c_department_value']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "GetItem",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "Get_a_row_by_ID": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Add_a_new_row": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_ticketupdates",
+              "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_a_row_by_ID')?['inputs']?['parameters']?['recordId'], ')')",
+              "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', first(outputs('List_rows')?['body/value'])?['f26c_employeeid'], ')')",
+              "item/f26c_updatedon": "@utcNow()",
+              "item/f26c_updatetype": 751610001,
+              "item/f26c_id": ""
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "CreateRecord",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "Update_a_row": [
+              "Succeeded"
+            ]
+          }
         }
       },
       "outputs": {}
     },
-    "templateName": ""
+    "templateName": null
   },
   "schemaVersion": "1.0.0.0"
 }

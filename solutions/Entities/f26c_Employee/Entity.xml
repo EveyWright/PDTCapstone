@@ -280,7 +280,7 @@
           <MaxLength>850</MaxLength>
           <Length>1700</Length>
           <displaynames>
-            <displayname description="ID" languagecode="1033" />
+            <displayname description="Employee ID" languagecode="1033" />
           </displaynames>
           <Descriptions>
             <Description description="" languagecode="1033" />

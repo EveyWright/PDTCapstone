@@ -86,6 +86,7 @@
       <RootComponent type="1" schemaName="f26c_ticket" behavior="0" />
       <RootComponent type="1" schemaName="f26c_ticketupdate" behavior="0" />
       <RootComponent type="29" id="{04629789-67bb-f111-aaad-000d3a3077fd}" behavior="0" />
+      <RootComponent type="300" schemaName="f26c_disruptiontrackercanv_501c2" behavior="0" />
       <RootComponent type="431" schemaName="f26c_attachment f26c_image" behavior="0" />
       <RootComponent type="431" schemaName="f26c_disruptionimages f26c_image" behavior="0" />
       <RootComponent type="432" schemaName="f26c_attachment" behavior="0" />
