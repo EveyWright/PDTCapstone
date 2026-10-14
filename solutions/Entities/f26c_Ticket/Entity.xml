@@ -524,7 +524,15 @@
               <Description description="" languagecode="1033" />
             </Descriptions>
             <options>
-              <option value="751610000" ExternalValue="" IsHidden="0">
+              <option value="751610002" ExternalValue="" IsHidden="0">
+                <labels>
+                  <label description="Closed" languagecode="1033" />
+                </labels>
+                <Descriptions>
+                  <Description description="" languagecode="1033" />
+                </Descriptions>
+              </option>
+              <option value="751610000" ExternalValue="New" IsHidden="0">
                 <labels>
                   <label description="New" languagecode="1033" />
                 </labels>
@@ -535,14 +543,6 @@
               <option value="751610001" ExternalValue="" IsHidden="0">
                 <labels>
                   <label description="Open" languagecode="1033" />
-                </labels>
-                <Descriptions>
-                  <Description description="" languagecode="1033" />
-                </Descriptions>
-              </option>
-              <option value="751610002" ExternalValue="" IsHidden="0">
-                <labels>
-                  <label description="Closed" languagecode="1033" />
                 </labels>
                 <Descriptions>
                   <Description description="" languagecode="1033" />
@@ -559,7 +559,7 @@
             </options>
           </optionset>
           <displaynames>
-            <displayname description="Status" languagecode="1033" />
+            <displayname description="Status (NOCS)" languagecode="1033" />
           </displaynames>
           <Descriptions>
             <Description description="" languagecode="1033" />

@@ -54,7 +54,7 @@
                     <row>
                       <cell id="{60833e82-ad76-452d-b623-e451fc2433b1}">
                         <labels>
-                          <label description="Status" languagecode="1033" />
+                          <label description="Status (NOCS)" languagecode="1033" />
                         </labels>
                         <control id="f26c_status" classid="{3ef39988-22bb-4f0b-bbbe-64b5a3748aee}" datafieldname="f26c_status" />
                       </cell>
