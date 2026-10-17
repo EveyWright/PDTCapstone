@@ -1,0 +1,193 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_38a62"
+        },
+        "runtimeSource": "embedded"
+      },
+      "shared_teams": {
+        "api": {
+          "name": "shared_teams"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedteams_19643"
+        },
+        "runtimeSource": "embedded"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_a_new_ticket_is_added_to_database": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "f26c_ticket",
+              "subscriptionRequest/scope": 4,
+              "subscriptionRequest/name": "04629789-67bb-f111-aaad-000d3a3077fd"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "metadata": {
+            "operationMetadataId": "c0a6b180-ff60-4451-bbcf-f1bfdc087d9f"
+          }
+        }
+      },
+      "actions": {
+        "Get_new_ticket": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_tickets",
+              "recordId": "@triggerOutputs()?['body/f26c_ticketid']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "GetItem",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "4f625d32-32a4-4f35-82ae-1f6452a9bb71"
+          }
+        },
+        "Claim_card": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "parameters": {
+              "poster": "Flow bot",
+              "location": "Group chat",
+              "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"New issue reported!\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_id']}\", \"wrap\": true },\n{ \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_title']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Summary of issue: @{outputs('Get_new_ticket')?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Est. Severity: @{outputs('Get_new_ticket')?['body/cr36f_severitylmh']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Recommended Department: @{outputs('Get_department')?['body/f26c_name']}\", \"wrap\": true}\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Take Ticket\", \"data\": { \"action\": \"claim\" } }\n  ]\n}",
+              "body/body/updateMessage": "@{outputs('Get_new_ticket')?['body/f26c_id']} has been claimed.",
+              "body/body/recipient/recipient": "19:fada0b28de584be0a632ecec0e924bc3@thread.v2"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+              "operationId": "PostCardAndWaitForResponse",
+              "connectionName": "shared_teams"
+            }
+          },
+          "runAfter": {
+            "Get_department": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "99b91fb2-d5e4-40b3-8342-144cfe4c8e9b"
+          }
+        },
+        "Update_a_tickets_status_and_update_who_has_taken_the_ticket": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_tickets",
+              "recordId": "@outputs('Get_new_ticket')?['body/f26c_ticketid']",
+              "item/f26c_status": 751610001,
+              "item/f26c_AssignedTo@odata.bind": "@concat('f26c_employees(', first(outputs('List_employees')?['body/value'])?['f26c_employeeid'], ')')"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "UpdateOnlyRecord",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "List_employees": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "3d113a03-01bf-45d7-aad5-b68c1eb9d0c0"
+          }
+        },
+        "List_employees": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_employees",
+              "$filter": "f26c_email eq '@{outputs('Claim_card')?['body/responder/userPrincipalName']}'",
+              "$top": 1
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "Claim_card": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Get_department": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_departments",
+              "recordId": "@outputs('Get_new_ticket')?['body/_f26c_department_value']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "GetItem",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "Get_new_ticket": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Add_a_new_row_to_TicketUpdates_table": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_ticketupdates",
+              "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_new_ticket')?['inputs']?['parameters']?['recordId'], ')')",
+              "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', first(outputs('List_employees')?['body/value'])?['f26c_employeeid'], ')')",
+              "item/f26c_updatedon": "@utcNow()",
+              "item/f26c_updatetype": 751610001,
+              "item/f26c_id": ""
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "CreateRecord",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "Update_a_tickets_status_and_update_who_has_taken_the_ticket": [
+              "Succeeded"
+            ]
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

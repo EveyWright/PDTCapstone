@@ -105,11 +105,11 @@
       </MissingDependency>
       <MissingDependency>
         <Required type="connectionreference" displayName="new_sharedcommondataserviceforapps_38a62" solution="Active" id.connectionreferencelogicalname="new_sharedcommondataserviceforapps_38a62" />
-        <Dependent type="29" displayName="Routing" id="{04629789-67bb-f111-aaad-000d3a3077fd}" />
+        <Dependent type="29" displayName="Claim Card" id="{04629789-67bb-f111-aaad-000d3a3077fd}" />
       </MissingDependency>
       <MissingDependency>
         <Required type="connectionreference" displayName="new_sharedteams_19643" solution="Active" id.connectionreferencelogicalname="new_sharedteams_19643" />
-        <Dependent type="29" displayName="Routing" id="{04629789-67bb-f111-aaad-000d3a3077fd}" />
+        <Dependent type="29" displayName="Claim Card" id="{04629789-67bb-f111-aaad-000d3a3077fd}" />
       </MissingDependency>
       <MissingDependency>
         <Required type="SettingDefinition" displayName="AppChannel" solution="msdyn_AppFrameworkInfraExtensions (1.0.0.20)" id.uniquename="AppChannel">
