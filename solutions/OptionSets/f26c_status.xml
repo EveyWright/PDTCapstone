@@ -30,7 +30,7 @@
     </option>
     <option value="751610002" ExternalValue="" Color="#d94e4e" IsHidden="0">
       <labels>
-        <label description="Blocked" languagecode="1033" />
+        <label description="Skip" languagecode="1033" />
       </labels>
       <Descriptions>
         <Description description="" languagecode="1033" />

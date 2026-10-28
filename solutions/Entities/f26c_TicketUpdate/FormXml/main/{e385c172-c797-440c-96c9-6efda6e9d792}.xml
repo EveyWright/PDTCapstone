@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{e385c172-c797-440c-96c9-6efda6e9d792}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{C264989E-90DC-4D77-A899-42A9202DB977}" IsUserDefined="1">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{1F58303E-61D4-42A0-9A36-824C43035BD3}">
+                  <labels>
+                    <label description="General" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{7816CF53-8C2F-4865-94B2-3823B2C591DD}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_id" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="f26c_ID" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{CDF611C7-2C23-47DD-A7CB-0EB07FBA18A1}">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c2d0d44e-8e47-4adb-8a3e-df148c18b895}">
+                        <labels>
+                          <label description="TicketID" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_ticketid" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="f26c_ticketid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5358dac9-7796-49e9-8d3c-8c6477274958}">
+                        <labels>
+                          <label description="UpdateType" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_updatetype" classid="{3ef39988-22bb-4f0b-bbbe-64b5a3748aee}" datafieldname="f26c_updatetype" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{94bdd8a4-9396-45c5-ba96-01fe4a6ea63b}">
+                        <labels>
+                          <label description="UpdateText" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_updatetext" classid="{4273edbd-ac1d-40d3-9fb2-095c621b552d}" datafieldname="f26c_updatetext" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{7dae1d86-759b-4e2b-9e70-0c877b5fc2df}">
+                        <labels>
+                          <label description="UpdatedBy" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_updatedby" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="f26c_updatedby" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{279f3935-5fe0-402d-971d-417ea3ae91ce}">
+                        <labels>
+                          <label description="UpdatedOn" languagecode="1033" />
+                        </labels>
+                        <control id="f26c_updatedon" classid="{5b773807-9fb2-42db-97c3-7a91eff8adff}" datafieldname="f26c_updatedon" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>
