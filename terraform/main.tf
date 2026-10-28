@@ -10,7 +10,7 @@ resource "random_id" "storage_suffix" {
 resource "azurerm_storage_account" "capstone" {
   name                            = "pdtcapstone${random_id.storage_suffix.hex}"
   resource_group_name             = azurerm_resource_group.capstone.name
-  location                        = "eastus"
+  location                        = "centralus"
   account_kind                    = "BlobStorage"
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
