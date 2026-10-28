@@ -8,7 +8,7 @@ resource "random_id" "storage_suffix" {
 }
 
 resource "azurerm_storage_account" "capstone" {
-  name                            = "pdtcapstone-${random_id.storage_suffix.hex}"
+  name                            = "pdtcapstone${random_id.storage_suffix.hex}"
   resource_group_name             = azurerm_resource_group.capstone.name
   location                        = azurerm_resource_group.capstone.location
   account_kind                    = "BlobStorage"
