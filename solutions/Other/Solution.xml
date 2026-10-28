@@ -86,6 +86,7 @@
       <RootComponent type="1" schemaName="f26c_ticket" behavior="0" />
       <RootComponent type="1" schemaName="f26c_ticketupdate" behavior="0" />
       <RootComponent type="29" id="{04629789-67bb-f111-aaad-000d3a3077fd}" behavior="0" />
+      <RootComponent type="29" id="{34f1d7e1-88c9-f111-aaaf-70a8a59b49cc}" behavior="0" />
       <RootComponent type="300" schemaName="f26c_disruptiontrackercanv_501c2" behavior="0" />
       <RootComponent type="431" schemaName="f26c_attachment f26c_image" behavior="0" />
       <RootComponent type="431" schemaName="f26c_disruptionimages f26c_image" behavior="0" />
@@ -108,8 +109,16 @@
         <Dependent type="29" displayName="Claim Card" id="{04629789-67bb-f111-aaad-000d3a3077fd}" />
       </MissingDependency>
       <MissingDependency>
+        <Required type="connectionreference" displayName="new_sharedcommondataserviceforapps_38a62" solution="Active" id.connectionreferencelogicalname="new_sharedcommondataserviceforapps_38a62" />
+        <Dependent type="29" displayName="Response Card" id="{34f1d7e1-88c9-f111-aaaf-70a8a59b49cc}" />
+      </MissingDependency>
+      <MissingDependency>
         <Required type="connectionreference" displayName="new_sharedteams_19643" solution="Active" id.connectionreferencelogicalname="new_sharedteams_19643" />
         <Dependent type="29" displayName="Claim Card" id="{04629789-67bb-f111-aaad-000d3a3077fd}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="connectionreference" displayName="new_sharedteams_19643" solution="Active" id.connectionreferencelogicalname="new_sharedteams_19643" />
+        <Dependent type="29" displayName="Response Card" id="{34f1d7e1-88c9-f111-aaaf-70a8a59b49cc}" />
       </MissingDependency>
       <MissingDependency>
         <Required type="SettingDefinition" displayName="AppChannel" solution="msdyn_AppFrameworkInfraExtensions (1.0.0.20)" id.uniquename="AppChannel">
