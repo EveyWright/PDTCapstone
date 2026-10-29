@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ImportExportXml version="9.2.26084.171" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26084.171" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26093.00167">
+<ImportExportXml version="9.2.26084.171" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26084.171" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26094.00165">
   <SolutionManifest>
     <UniqueName>F26Capstone</UniqueName>
     <LocalizedNames>
@@ -79,9 +79,8 @@
     </Publisher>
     <RootComponents>
       <RootComponent type="1" schemaName="f26c_attachment" behavior="0" />
+      <RootComponent type="1" schemaName="f26c_attachmentblob" behavior="0" />
       <RootComponent type="1" schemaName="f26c_department" behavior="0" />
-      <RootComponent type="1" schemaName="f26c_disruptionimages" behavior="0" />
-      <RootComponent type="1" schemaName="f26c_disruptiontickets" behavior="0" />
       <RootComponent type="1" schemaName="f26c_employee" behavior="0" />
       <RootComponent type="1" schemaName="f26c_ticket" behavior="0" />
       <RootComponent type="1" schemaName="f26c_ticketupdate" behavior="0" />
@@ -89,22 +88,11 @@
       <RootComponent type="29" id="{34f1d7e1-88c9-f111-aaaf-70a8a59b49cc}" behavior="0" />
       <RootComponent type="300" schemaName="f26c_disruptiontrackercanv_501c2" behavior="0" />
       <RootComponent type="431" schemaName="f26c_attachment f26c_image" behavior="0" />
-      <RootComponent type="431" schemaName="f26c_disruptionimages f26c_image" behavior="0" />
-      <RootComponent type="432" schemaName="f26c_attachment" behavior="0" />
-      <RootComponent type="432" schemaName="f26c_disruptionimages" behavior="0" />
-      <RootComponent type="62" schemaName="f26c_DisruptionTracker" behavior="0" />
-      <RootComponent type="80" schemaName="f26c_DisruptionTracker" behavior="0" />
       <RootComponent type="9" schemaName="f26c_open" behavior="0" />
       <RootComponent type="9" schemaName="f26c_status" behavior="0" />
     </RootComponents>
     <MissingDependencies>
       <MissingDependency>
-        <Required type="61" schemaName="msdyn_/Images/AppModule_Default_Icon.png" displayName="msdyn_/Images/AppModule_Default_Icon.png" solution="AppModuleWebResources (2.5)">
-          <package appName="AppModule Web Resources Package" version="2.5">AppModuleWebResources (2.5)</package>
-        </Required>
-        <Dependent type="80" schemaName="f26c_DisruptionTracker" displayName="Disruption Tracker" />
-      </MissingDependency>
-      <MissingDependency>
         <Required type="connectionreference" displayName="new_sharedcommondataserviceforapps_38a62" solution="Active" id.connectionreferencelogicalname="new_sharedcommondataserviceforapps_38a62" />
         <Dependent type="29" displayName="Claim Card" id="{04629789-67bb-f111-aaad-000d3a3077fd}" />
       </MissingDependency>
@@ -119,12 +107,6 @@
       <MissingDependency>
         <Required type="connectionreference" displayName="new_sharedteams_19643" solution="Active" id.connectionreferencelogicalname="new_sharedteams_19643" />
         <Dependent type="29" displayName="Response Card" id="{34f1d7e1-88c9-f111-aaaf-70a8a59b49cc}" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="SettingDefinition" displayName="AppChannel" solution="msdyn_AppFrameworkInfraExtensions (1.0.0.20)" id.uniquename="AppChannel">
-          <package appName="PowerAppsAppFramework Package" version="1.0.0.25">PowerAppsAppFramework_Anchor (1.0.0.25)</package>
-        </Required>
-        <Dependent type="AppSetting" displayName="parentappmoduleid.uniquename=f26c_DisruptionTracker,settingdefinitionid.uniquename=AppChannel" id.parentappmoduleid.uniquename="f26c_DisruptionTracker" id.settingdefinitionid.uniquename="AppChannel" />
       </MissingDependency>
     </MissingDependencies>
   </SolutionManifest>

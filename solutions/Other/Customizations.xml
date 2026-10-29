@@ -1,19 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ImportExportXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26084.171" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26093.00167">
+<ImportExportXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26084.171" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26094.00165">
   <Entities />
   <Roles />
   <Workflows />
   <FieldSecurityProfiles />
   <Templates />
-  <EntityImageConfigs />
   <AttributeImageConfigs />
   <EntityMaps />
   <EntityRelationships />
   <OrganizationSettings />
   <optionsets />
   <CustomControls />
-  <AppModuleSiteMaps />
-  <AppModules />
   <EntityDataProviders />
   <CanvasApps />
   <connectionreferences>
@@ -21,30 +18,6 @@
       <connectionreferencedisplayname>cr36f_phil_eB7BM0.cr.shared_commondataserviceforapps.99645add-b9a7-436f-b170-61b1e4c789c2</connectionreferencedisplayname>
       <connectorid>/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps</connectorid>
       <iscustomizable>0</iscustomizable>
-      <promptingbehavior>0</promptingbehavior>
-      <statecode>0</statecode>
-      <statuscode>1</statuscode>
-    </connectionreference>
-    <connectionreference connectionreferencelogicalname="f26c_sharedcommondataserviceforapps_19a55">
-      <connectionreferencedisplayname>Microsoft Dataverse F26Capstone-19a55</connectionreferencedisplayname>
-      <connectorid>/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps</connectorid>
-      <iscustomizable>1</iscustomizable>
-      <promptingbehavior>0</promptingbehavior>
-      <statecode>0</statecode>
-      <statuscode>1</statuscode>
-    </connectionreference>
-    <connectionreference connectionreferencelogicalname="f26c_sharedcommondataserviceforapps_87735">
-      <connectionreferencedisplayname>Microsoft Dataverse F26Capstone-87735</connectionreferencedisplayname>
-      <connectorid>/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps</connectorid>
-      <iscustomizable>1</iscustomizable>
-      <promptingbehavior>0</promptingbehavior>
-      <statecode>0</statecode>
-      <statuscode>1</statuscode>
-    </connectionreference>
-    <connectionreference connectionreferencelogicalname="f26c_sharedcommondataserviceforapps_8928e">
-      <connectionreferencedisplayname>Microsoft Dataverse F26Capstone-8928e</connectionreferencedisplayname>
-      <connectorid>/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps</connectorid>
-      <iscustomizable>1</iscustomizable>
       <promptingbehavior>0</promptingbehavior>
       <statecode>0</statecode>
       <statuscode>1</statuscode>
