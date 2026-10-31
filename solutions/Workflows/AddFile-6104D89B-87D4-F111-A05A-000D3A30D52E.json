@@ -1,0 +1,123 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_d5a3958f"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "6cdf84c2-4312-4de9-a628-6dfa4691795a"
+          },
+          "type": "Request",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "title": "FileContent",
+                  "type": "object",
+                  "x-ms-dynamically-added": true,
+                  "description": "Select a file or image",
+                  "x-ms-content-hint": "FILE",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "contentBytes": {
+                      "type": "string",
+                      "format": "byte"
+                    }
+                  }
+                },
+                "text": {
+                  "title": "TicketID",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Select the TicketID",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_1": {
+                  "title": "SubmittedBy",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Select who submitted the attachment",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "date": {
+                  "title": "UploadedOn",
+                  "type": "string",
+                  "format": "date",
+                  "x-ms-dynamically-added": true,
+                  "description": "Enter the date this was uploaded on",
+                  "x-ms-content-hint": "DATE"
+                },
+                "text_2": {
+                  "title": "AttachmentID",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Enter the AttachmentID of this attachment",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "text",
+                "text_1",
+                "date",
+                "text_2"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Add_a_new_row_to_selected_environment": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "e64e0922-7c3d-450d-89fe-3b233f34d490"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "CreateRecordWithOrganization",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "organization": "https://orgcd51818d.crm.dynamics.com",
+              "entityName": "f26c_attachments",
+              "item/f26c_id": "@triggerBody()['text_2']",
+              "item/f26c_TicketID@odata.bind": "@triggerBody()['text']",
+              "item/f26c_UploadedBy@odata.bind": "@triggerBody()['text_1']",
+              "item/f26c_uploadedon": "@triggerBody()['date']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

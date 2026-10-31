@@ -484,32 +484,6 @@
                     "operationMetadataId": "c01b739c-668d-4562-9706-3853d71ec511"
                   }
                 },
-                "Add_a_new_row_to_TicketUpdates_table": {
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "parameters": {
-                      "entityName": "f26c_ticketupdates",
-                      "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_ticket')?['inputs']?['parameters']?['recordId'], ')')",
-                      "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', outputs('Get_assignee')?['body/f26c_employeeid'], ')')",
-                      "item/f26c_updatedon": "@utcNow()",
-                      "item/f26c_updatetype": 751610002,
-                      "item/f26c_updatetext": "@variables('notes')"
-                    },
-                    "host": {
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
-                      "operationId": "CreateRecord",
-                      "connectionName": "shared_commondataserviceforapps"
-                    }
-                  },
-                  "runAfter": {
-                    "Get_new_assignee_": [
-                      "Succeeded"
-                    ]
-                  },
-                  "metadata": {
-                    "operationMetadataId": "1b046354-adbc-4137-83dd-56c5e9b83105"
-                  }
-                },
                 "Post_message_in_a_chat_or_channel": {
                   "type": "OpenApiConnection",
                   "inputs": {
@@ -527,7 +501,7 @@
                   },
                   "runAfter": {
                     "Updates_a_ticket_for_transfer": [
-                      "SUCCEEDED"
+                      "Succeeded"
                     ]
                   },
                   "metadata": {
@@ -539,8 +513,7 @@
                   "inputs": {
                     "parameters": {
                       "entityName": "f26c_ticketupdates",
-                      "$select": "@outputs('Add_a_new_row_to_TicketUpdates_table')?['body/f26c_updatetext']",
-                      "$filter": "_f26c_ticketid_value eq '@{triggerOutputs()?['body/f26c_ticketid']}'",
+                      "$filter": "_f26c_ticketid_value eq '@{triggerOutputs()?['body/f26c_ticketid']}' and f26c_updatetext ne null",
                       "$orderby": "f26c_updatedon asc"
                     },
                     "host": {
@@ -550,8 +523,8 @@
                     }
                   },
                   "runAfter": {
-                    "Add_a_new_row_to_TicketUpdates_table": [
-                      "Succeeded"
+                    "Add_a_new_row_to_TicketUpdates": [
+                      "SUCCEEDED"
                     ]
                   }
                 },
@@ -559,11 +532,11 @@
                   "type": "Select",
                   "inputs": {
                     "from": "@outputs('List_ticket_updates')?['body/value']",
-                    "select": "@concat(\r\n  formatDateTime(item()?['f26c_updatedon'], 'yyyy-MM-dd HH:mm'),\r\n  ' - ',\r\n  coalesce(item()?['_f26c_updatedby_value@OData.Community.Display.V1.FormattedValue'], 'Unknown'),\r\n  ' (',\r\n  coalesce(item()?['f26c_updatetype@OData.Community.Display.V1.FormattedValue'], ''),\r\n  '): ',\r\n  coalesce(item()?['f26c_updatetext'], '')\r\n)"
+                    "select": "@concat(\r\n  formatDateTime(item()?['f26c_updatedon'], 'yyyy-MM-dd HH:mm'),\r\n  ' - ',\r\n  coalesce(item()?['f26c_updatetext'], '')\r\n)"
                   },
                   "runAfter": {
                     "List_ticket_updates": [
-                      "SUCCEEDED"
+                      "Succeeded"
                     ]
                   }
                 },
@@ -572,7 +545,7 @@
                   "inputs": "@join(body('Select_notes'), '<br>')",
                   "runAfter": {
                     "Select_notes": [
-                      "SUCCEEDED"
+                      "Succeeded"
                     ]
                   }
                 },
@@ -594,11 +567,34 @@
                   },
                   "runAfter": {
                     "Notes_history": [
-                      "SUCCEEDED"
+                      "Succeeded"
                     ]
                   },
                   "metadata": {
                     "operationMetadataId": "a3dfe1a9-2b61-4112-9ce7-dc36aa5c5760"
+                  }
+                },
+                "Add_a_new_row_to_TicketUpdates": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "entityName": "f26c_ticketupdates",
+                      "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_ticket')?['inputs']?['parameters']?['recordId'], ')')",
+                      "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', outputs('Get_assignee')?['body/f26c_employeeid'], ')')",
+                      "item/f26c_updatedon": "@utcNow()",
+                      "item/f26c_updatetype": 751610002,
+                      "item/f26c_updatetext": "@concat(outputs('Get_assignee')?['body/f26c_name'], ': ', variables('notes'))"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "connectionName": "shared_commondataserviceforapps"
+                    }
+                  },
+                  "runAfter": {
+                    "Get_new_assignee_": [
+                      "Succeeded"
+                    ]
                   }
                 }
               },

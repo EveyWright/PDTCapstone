@@ -177,6 +177,7 @@
           <LogicalName>f26c_ticketid</LogicalName>
           <RequiredLevel>required</RequiredLevel>
           <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <ImeMode>auto</ImeMode>
           <ValidForUpdateApi>1</ValidForUpdateApi>
           <ValidForReadApi>1</ValidForReadApi>
           <ValidForCreateApi>1</ValidForCreateApi>
@@ -252,6 +253,7 @@
           <LogicalName>f26c_updatedby</LogicalName>
           <RequiredLevel>required</RequiredLevel>
           <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <ImeMode>auto</ImeMode>
           <ValidForUpdateApi>1</ValidForUpdateApi>
           <ValidForReadApi>1</ValidForReadApi>
           <ValidForCreateApi>1</ValidForCreateApi>
@@ -355,8 +357,8 @@
           <IsRetrievable>0</IsRetrievable>
           <IsLocalizable>0</IsLocalizable>
           <Format>textarea</Format>
-          <MaxLength>100</MaxLength>
-          <Length>200</Length>
+          <MaxLength>4000</MaxLength>
+          <Length>8000</Length>
           <displaynames>
             <displayname description="UpdateText" languagecode="1033" />
           </displaynames>
