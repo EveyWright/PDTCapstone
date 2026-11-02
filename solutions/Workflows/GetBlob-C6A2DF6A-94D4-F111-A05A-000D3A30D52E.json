@@ -1,0 +1,81 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_azureblob": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedazureblob_77298"
+        },
+        "api": {
+          "name": "shared_azureblob"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "undefined",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "description": "Please enter your Blob's ID",
+                  "title": "BlobId",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Get_blob_content_(V2)": {
+          "runAfter": {
+            "Compose_ID": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "AccountNameFromSettings",
+              "id": "@concat('/disruption-images/', outputs('Compose_ID'), '.pdf')",
+              "inferContentType": true
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_azureblob",
+              "operationId": "GetFileContent_V2",
+              "connectionName": "shared_azureblob"
+            }
+          }
+        },
+        "Compose_ID": {
+          "runAfter": {},
+          "type": "Compose",
+          "inputs": "@triggerBody()?['text']"
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}
