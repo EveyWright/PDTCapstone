@@ -200,7 +200,8 @@
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
-              "entityName": "f26c_employees"
+              "entityName": "f26c_employees",
+              "$orderby": "f26c_name asc"
             },
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
@@ -249,7 +250,7 @@
                 "parameters": {
                   "poster": "Flow bot",
                   "location": "Chat with Flow bot",
-                  "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"@{triggerOutputs()?['body/f26c_id']}\", \"color\": \"Attention\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"You claimed this issue\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{triggerOutputs()?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"Input.Text\", \"id\": \"notes\", \"label\": \"Work notes (required)\", \"placeholder\": \"What was done, why you're skipping, or why you're transferring\", \"isMultiline\": true },\n    {\n      \"type\": \"Input.ChoiceSet\",\n      \"id\": \"transferTo\",\n      \"label\": \"Transfer to (only for Transfer)\",\n      \"placeholder\": \"Select a department\",\n      \"choices\": @{body('Select')}\n    }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Mark resolved\", \"data\": { \"action\": \"resolve\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Skip\", \"data\": { \"action\": \"skip\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Transfer\", \"data\": { \"action\": \"transfer\" } }\n  ]\n}",
+                  "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"@{variables('errorMessage')}\", \"color\": \"Attention\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"You claimed this issue\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"Ticket: @{triggerOutputs()?['body/f26c_id']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"@{triggerOutputs()?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"Input.Text\", \"id\": \"notes\", \"label\": \"Work notes (required)\", \"placeholder\": \"What was done to solve the issue, why you are skipping, or why you are transferring. Keep it below 4000 characters.\", \"isMultiline\": true },\n    {\n      \"type\": \"Input.ChoiceSet\",\n      \"id\": \"transferTo\",\n      \"label\": \"Transfer to (only for Transfer)\",\n      \"placeholder\": \"Select a person\",\n      \"choices\": @{body('Select')}\n    }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Mark resolved\", \"data\": { \"action\": \"resolve\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Skip\", \"data\": { \"action\": \"skip\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Transfer\", \"data\": { \"action\": \"transfer\" } }\n  ]\n}",
                   "body/body/updateMessage": "Thank you for looking into the issue!",
                   "body/body/recipient/to": "@outputs('Get_assignee')?['body/f26c_email']"
                 },
@@ -524,7 +525,7 @@
                   },
                   "runAfter": {
                     "Add_a_new_row_to_TicketUpdates": [
-                      "SUCCEEDED"
+                      "Succeeded"
                     ]
                   }
                 },
