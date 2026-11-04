@@ -88,6 +88,7 @@
       <RootComponent type="29" id="{34f1d7e1-88c9-f111-aaaf-70a8a59b49cc}" behavior="0" />
       <RootComponent type="29" id="{6104d89b-87d4-f111-a05a-000d3a30d52e}" behavior="0" />
       <RootComponent type="29" id="{c6a2df6a-94d4-f111-a05a-000d3a30d52e}" behavior="0" />
+      <RootComponent type="29" id="{dce3b5b5-6ac2-f111-aaad-70a8a59b49cc}" behavior="0" />
       <RootComponent type="29" id="{fddaa66e-8dd4-f111-a05a-000d3a30d52e}" behavior="0" />
       <RootComponent type="300" schemaName="f26c_disruptiontrackercanv_501c2" behavior="0" />
       <RootComponent type="431" schemaName="f26c_attachment f26c_image" behavior="0" />
@@ -112,8 +113,16 @@
         <Dependent type="29" displayName="Response Card" id="{34f1d7e1-88c9-f111-aaaf-70a8a59b49cc}" />
       </MissingDependency>
       <MissingDependency>
+        <Required type="connectionreference" displayName="new_sharedcommondataserviceforapps_7fc03" solution="Active" id.connectionreferencelogicalname="new_sharedcommondataserviceforapps_7fc03" />
+        <Dependent type="29" displayName="Notify Ticket issuer status update" id="{dce3b5b5-6ac2-f111-aaad-70a8a59b49cc}" />
+      </MissingDependency>
+      <MissingDependency>
         <Required type="connectionreference" displayName="new_sharedcommondataserviceforapps_d5a3958f" solution="Active" id.connectionreferencelogicalname="new_sharedcommondataserviceforapps_d5a3958f" />
         <Dependent type="29" displayName="Add File" id="{6104d89b-87d4-f111-a05a-000d3a30d52e}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="connectionreference" displayName="new_sharedteams_169f6" solution="Active" id.connectionreferencelogicalname="new_sharedteams_169f6" />
+        <Dependent type="29" displayName="Notify Ticket issuer status update" id="{dce3b5b5-6ac2-f111-aaad-70a8a59b49cc}" />
       </MissingDependency>
       <MissingDependency>
         <Required type="connectionreference" displayName="new_sharedteams_19643" solution="Active" id.connectionreferencelogicalname="new_sharedteams_19643" />
