@@ -314,7 +314,7 @@
                   "type": "SetVariable",
                   "inputs": {
                     "name": "errorMessage",
-                    "value": "@if(variables('isValid'), '', 'Please add notes, and choose a department if you are transferring. Then try again.')"
+                    "value": "@if(variables('isValid'), '', '')"
                   }
                 },
                 "Add_a_new_row": {
@@ -413,7 +413,7 @@
                       "poster": "Flow bot",
                       "location": "Chat with Flow bot",
                       "body/recipient": "@outputs('Get_assignee')?['body/f26c_email']",
-                      "body/messageBody": "<p class=\"editor-paragraph\">A ticket has been transferred to you.<br><br>Ticket: @{outputs('Update_a_row')?['body/f26c_title']}<br>Ticket ID: @{outputs('Update_a_row')?['body/f26c_id']}</p><p class=\"editor-paragraph\"><br>Work notes history :<br>@{outputs('Notes_history_1')}<br><br>You will receive a card shortly with options to resolve, skip, or transfer it.</p>"
+                      "body/messageBody": "<p class=\"editor-paragraph\">You have submitted a note to this ticket.<br><br>Ticket: @{outputs('Update_a_row')?['body/f26c_title']}<br>Ticket ID: @{outputs('Update_a_row')?['body/f26c_id']}</p><p class=\"editor-paragraph\"><br>Work notes history :<br>@{outputs('Notes_history_1')}<br><br>You will receive a card shortly with options to resolve, skip, transfer it, or submit another note.</p>"
                     },
                     "host": {
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
@@ -473,14 +473,12 @@
                 }
               },
               "expression": {
-                "and": [
+                "or": [
                   {
-                    "not": {
-                      "equals": [
-                        "action",
-                        "submit"
-                      ]
-                    }
+                    "equals": [
+                      "@variables('action')",
+                      "submit"
+                    ]
                   }
                 ]
               },
