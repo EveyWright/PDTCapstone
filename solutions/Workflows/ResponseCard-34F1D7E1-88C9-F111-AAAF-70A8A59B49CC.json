@@ -2,22 +2,22 @@
   "properties": {
     "connectionReferences": {
       "shared_commondataserviceforapps": {
-        "runtimeSource": "embedded",
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
         "connection": {
           "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_38a62"
         },
-        "api": {
-          "name": "shared_commondataserviceforapps"
-        }
+        "runtimeSource": "embedded"
       },
       "shared_teams": {
-        "runtimeSource": "embedded",
+        "api": {
+          "name": "shared_teams"
+        },
         "connection": {
           "connectionReferenceLogicalName": "new_sharedteams_19643"
         },
-        "api": {
-          "name": "shared_teams"
-        }
+        "runtimeSource": "embedded"
       }
     },
     "definition": {
@@ -35,9 +35,6 @@
       },
       "triggers": {
         "When_a_row_is_added,_modified_or_deleted": {
-          "metadata": {
-            "operationMetadataId": "941bb4c7-9418-46a5-b38e-51c6c17270f1"
-          },
           "type": "OpenApiConnectionWebhook",
           "inputs": {
             "parameters": {
@@ -56,19 +53,14 @@
             {
               "expression": "@not(empty(triggerOutputs()?['body/_f26c_assignedto_value']))"
             }
-          ]
+          ],
+          "metadata": {
+            "operationMetadataId": "941bb4c7-9418-46a5-b38e-51c6c17270f1"
+          }
         }
       },
       "actions": {
         "Initialize_isValid_variable": {
-          "runAfter": {
-            "Get_assignee": [
-              "Succeeded"
-            ]
-          },
-          "metadata": {
-            "operationMetadataId": "ebbb132d-def9-4207-ba3a-415ad826215d"
-          },
           "type": "InitializeVariable",
           "inputs": {
             "variables": [
@@ -78,13 +70,17 @@
                 "value": false
               }
             ]
+          },
+          "runAfter": {
+            "Get_assignee": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "ebbb132d-def9-4207-ba3a-415ad826215d"
           }
         },
         "Get_ticket": {
-          "runAfter": {},
-          "metadata": {
-            "operationMetadataId": "4f625d32-32a4-4f35-82ae-1f6452a9bb71"
-          },
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
@@ -96,17 +92,13 @@
               "operationId": "GetItem",
               "connectionName": "shared_commondataserviceforapps"
             }
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "4f625d32-32a4-4f35-82ae-1f6452a9bb71"
           }
         },
         "Get_assignee": {
-          "runAfter": {
-            "Get_ticket": [
-              "Succeeded"
-            ]
-          },
-          "metadata": {
-            "operationMetadataId": "639377d2-46ac-4876-954a-2f82293a51b9"
-          },
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
@@ -118,17 +110,17 @@
               "operationId": "GetItem",
               "connectionName": "shared_commondataserviceforapps"
             }
-          }
-        },
-        "Initialize_action_variable": {
+          },
           "runAfter": {
-            "Initialize_isValid_variable": [
+            "Get_ticket": [
               "Succeeded"
             ]
           },
           "metadata": {
-            "operationMetadataId": "36242b0b-f568-48f9-b06f-fca5984a156b"
-          },
+            "operationMetadataId": "639377d2-46ac-4876-954a-2f82293a51b9"
+          }
+        },
+        "Initialize_action_variable": {
           "type": "InitializeVariable",
           "inputs": {
             "variables": [
@@ -137,17 +129,17 @@
                 "type": "string"
               }
             ]
-          }
-        },
-        "Initialize_notes_variable": {
+          },
           "runAfter": {
-            "Initialize_action_variable": [
+            "Initialize_isValid_variable": [
               "Succeeded"
             ]
           },
           "metadata": {
-            "operationMetadataId": "ee443fa8-f9d4-490b-a08a-b2a6d187936b"
-          },
+            "operationMetadataId": "36242b0b-f568-48f9-b06f-fca5984a156b"
+          }
+        },
+        "Initialize_notes_variable": {
           "type": "InitializeVariable",
           "inputs": {
             "variables": [
@@ -156,17 +148,17 @@
                 "type": "string"
               }
             ]
-          }
-        },
-        "Initialize_errorMessage_variable": {
+          },
           "runAfter": {
-            "Initialize_notes_variable": [
+            "Initialize_action_variable": [
               "Succeeded"
             ]
           },
           "metadata": {
-            "operationMetadataId": "eacad97e-858a-4a1c-9be9-f9f72af2d494"
-          },
+            "operationMetadataId": "ee443fa8-f9d4-490b-a08a-b2a6d187936b"
+          }
+        },
+        "Initialize_errorMessage_variable": {
           "type": "InitializeVariable",
           "inputs": {
             "variables": [
@@ -175,17 +167,17 @@
                 "type": "string"
               }
             ]
-          }
-        },
-        "Initialize_transferTo_variable": {
+          },
           "runAfter": {
-            "Initialize_errorMessage_variable": [
+            "Initialize_notes_variable": [
               "Succeeded"
             ]
           },
           "metadata": {
-            "operationMetadataId": "47861a27-3588-4072-97a0-20dc14cbb34d"
-          },
+            "operationMetadataId": "eacad97e-858a-4a1c-9be9-f9f72af2d494"
+          }
+        },
+        "Initialize_transferTo_variable": {
           "type": "InitializeVariable",
           "inputs": {
             "variables": [
@@ -194,17 +186,17 @@
                 "type": "string"
               }
             ]
-          }
-        },
-        "List_employees": {
+          },
           "runAfter": {
-            "Initialize_transferTo_variable": [
+            "Initialize_errorMessage_variable": [
               "Succeeded"
             ]
           },
           "metadata": {
-            "operationMetadataId": "6cc30c6e-52ff-4436-8560-b25a22d0d8b3"
-          },
+            "operationMetadataId": "47861a27-3588-4072-97a0-20dc14cbb34d"
+          }
+        },
+        "List_employees": {
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
@@ -217,17 +209,17 @@
               "operationId": "ListRecords",
               "connectionName": "shared_commondataserviceforapps"
             }
-          }
-        },
-        "Select": {
+          },
           "runAfter": {
-            "List_employees": [
+            "Initialize_transferTo_variable": [
               "Succeeded"
             ]
           },
           "metadata": {
-            "operationMetadataId": "58a3232a-d976-4fe1-96e1-ae64e3a9c96c"
-          },
+            "operationMetadataId": "6cc30c6e-52ff-4436-8560-b25a22d0d8b3"
+          }
+        },
+        "Select": {
           "type": "Select",
           "inputs": {
             "from": "@outputs('List_employees')?['body/value']",
@@ -235,20 +227,31 @@
               "title": "@item()?['f26c_name']",
               "value": "@item()?['f26c_employeeid']"
             }
+          },
+          "runAfter": {
+            "List_employees": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "58a3232a-d976-4fe1-96e1-ae64e3a9c96c"
           }
         },
         "Do_until": {
+          "type": "Until",
+          "expression": "@equals(variables('isValid'),true)",
+          "limit": {
+            "count": 5,
+            "timeout": "P7D"
+          },
           "actions": {
             "Response_card": {
-              "metadata": {
-                "operationMetadataId": "ddb89d67-7809-4045-8d2b-bef3d928dc12"
-              },
               "type": "OpenApiConnectionWebhook",
               "inputs": {
                 "parameters": {
                   "poster": "Flow bot",
                   "location": "Chat with Flow bot",
-                  "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"@{variables('errorMessage')}\", \"color\": \"Attention\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"You claimed this issue\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"Ticket: @{triggerOutputs()?['body/f26c_id']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"@{triggerOutputs()?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"Input.Text\", \"id\": \"notes\", \"label\": \"Work notes (required)\", \"placeholder\": \"What was done to solve the issue, why you are skipping, or why you are transferring. Keep it below 4000 characters.\", \"isMultiline\": true },\n    {\n      \"type\": \"Input.ChoiceSet\",\n      \"id\": \"transferTo\",\n      \"label\": \"Transfer to (only for Transfer)\",\n      \"placeholder\": \"Select a person\",\n      \"choices\": @{body('Select')}\n    }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Mark resolved\", \"data\": { \"action\": \"resolve\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Skip\", \"data\": { \"action\": \"skip\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Transfer\", \"data\": { \"action\": \"transfer\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Submit\", \"data\": { \"action\": \"submit\" } }\n  ]\n}",
+                  "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"@{variables('errorMessage')}\", \"color\": \"Attention\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"You claimed this issue\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"Ticket: @{triggerOutputs()?['body/f26c_id']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"@{triggerOutputs()?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"Input.Text\", \"id\": \"notes\", \"label\": \"Work notes (required)\", \"placeholder\": \"What was done to solve the issue, why you are skipping, or why you are transferring.\", \"isMultiline\": true, \"maxLength\": 3900 },\n    {\n      \"type\": \"Input.ChoiceSet\",\n      \"id\": \"transferTo\",\n      \"label\": \"Transfer to (only for Transfer)\",\n      \"placeholder\": \"Select a person\",\n      \"choices\": @{body('Select')}\n    }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Mark resolved\", \"data\": { \"action\": \"resolve\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Skip\", \"data\": { \"action\": \"skip\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Transfer\", \"data\": { \"action\": \"transfer\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Submit\", \"data\": { \"action\": \"submit\" } }\n  ]\n}",
                   "body/body/updateMessage": "Thank you for looking into the issue!",
                   "body/body/recipient/to": "@outputs('Get_assignee')?['body/f26c_email']"
                 },
@@ -257,9 +260,17 @@
                   "operationId": "PostCardAndWaitForResponse",
                   "connectionName": "shared_teams"
                 }
+              },
+              "metadata": {
+                "operationMetadataId": "ddb89d67-7809-4045-8d2b-bef3d928dc12"
               }
             },
             "Set_action_variable": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "action",
+                "value": "@coalesce(outputs('Response_card')?['body/data/action'], '')"
+              },
               "runAfter": {
                 "Response_card": [
                   "Succeeded"
@@ -267,14 +278,14 @@
               },
               "metadata": {
                 "operationMetadataId": "f7530f2a-35d2-490c-9468-fce0035874ad"
-              },
-              "type": "SetVariable",
-              "inputs": {
-                "name": "action",
-                "value": "@coalesce(outputs('Response_card')?['body/data/action'], '')"
               }
             },
             "Set_notes_variable_": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "notes",
+                "value": "@coalesce(outputs('Response_card')?['body/data/notes'], '')"
+              },
               "runAfter": {
                 "Set_action_variable": [
                   "Succeeded"
@@ -282,27 +293,37 @@
               },
               "metadata": {
                 "operationMetadataId": "60ab7e5d-482a-4cc5-b5af-c066a3ac53bd"
-              },
-              "type": "SetVariable",
-              "inputs": {
-                "name": "notes",
-                "value": "@coalesce(outputs('Response_card')?['body/data/notes'], '')"
               }
             },
             "Condition": {
+              "type": "If",
+              "expression": {
+                "or": [
+                  {
+                    "equals": [
+                      "@variables('action')",
+                      "submit"
+                    ]
+                  }
+                ]
+              },
               "actions": {
                 "Set_isValid_variable__1": {
-                  "metadata": {
-                    "operationMetadataId": "f7e3b0ef-1862-4270-8cf8-f79b5304842c"
-                  },
                   "type": "SetVariable",
                   "inputs": {
                     "name": "isValid",
-                    "value": "@and(\r\n  not(empty(trim(variables('notes')))),\r\n  not(equals(variables('action'), 'submit'))\r\n)"
+                    "value": "@and(\r\n  not(empty(trim(variables('notes')))),\r\n  lessOrEquals(length(variables('notes')), 3900),\r\n  or(\r\n    not(equals(variables('action'), 'transfer')),\r\n    and(\r\n      not(empty(variables('transferTo'))),\r\n      not(equals(toLower(variables('transferTo')), toLower(outputs('Get_assignee')?['body/f26c_employeeid'])))\r\n    )\r\n  )\r\n)"
                   },
-                  "description": ""
+                  "metadata": {
+                    "operationMetadataId": "f7e3b0ef-1862-4270-8cf8-f79b5304842c"
+                  }
                 },
                 "Set_errorMessage_variable__1": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "errorMessage",
+                    "value": "@if(variables('isValid'), '', if(and(equals(variables('action'), 'transfer'), empty(variables('transferTo'))), 'Please select a person to transfer this ticket to.', if(empty(trim(variables('notes'))), 'Please add work notes.', if(greater(length(variables('notes')), 4000), 'Work notes are too long. Please keep them under 4000 characters or save the first part and write out the second.', 'You cannot transfer a ticket to yourself. Please choose someone else.'))))"
+                  },
                   "runAfter": {
                     "Set_isValid_variable__1": [
                       "Succeeded"
@@ -310,19 +331,9 @@
                   },
                   "metadata": {
                     "operationMetadataId": "e9702769-68df-4928-a945-3739745c8126"
-                  },
-                  "type": "SetVariable",
-                  "inputs": {
-                    "name": "errorMessage",
-                    "value": "@if(variables('isValid'), '', '')"
                   }
                 },
                 "Add_a_new_row": {
-                  "runAfter": {
-                    "Set_errorMessage_variable__1": [
-                      "Succeeded"
-                    ]
-                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -338,14 +349,17 @@
                       "operationId": "CreateRecord",
                       "connectionName": "shared_commondataserviceforapps"
                     }
-                  }
-                },
-                "List_rows": {
+                  },
                   "runAfter": {
-                    "Add_a_new_row": [
+                    "Set_errorMessage_variable__1": [
                       "Succeeded"
                     ]
                   },
+                  "metadata": {
+                    "operationMetadataId": "cf2a1518-1655-41d9-b929-e8ad4e07f1f4"
+                  }
+                },
+                "List_rows": {
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -358,35 +372,44 @@
                       "operationId": "ListRecords",
                       "connectionName": "shared_commondataserviceforapps"
                     }
+                  },
+                  "runAfter": {
+                    "Add_a_new_row": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "bb65cf49-15f1-4984-8a4c-2d0af3a7c522"
                   }
                 },
                 "Select_notes_1": {
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@outputs('List_rows')?['body/value']",
+                    "select": "@concat(\r\n  formatDateTime(item()?['f26c_updatedon'], 'yyyy-MM-dd HH:mm'),\r\n  ' - ',\r\n  coalesce(item()?['f26c_updatetext'], '')\r\n)"
+                  },
                   "runAfter": {
                     "List_rows": [
                       "Succeeded"
                     ]
                   },
-                  "type": "Select",
-                  "inputs": {
-                    "from": "@outputs('List_rows')?['body/value']",
-                    "select": "@concat(\r\n  formatDateTime(item()?['f26c_updatedon'], 'yyyy-MM-dd HH:mm'),\r\n  ' - ',\r\n  coalesce(item()?['f26c_updatetext'], '')\r\n)"
+                  "metadata": {
+                    "operationMetadataId": "b76bf2dc-2dfb-48c2-8e58-de83b671d2b8"
                   }
                 },
                 "Notes_history_1": {
+                  "type": "Compose",
+                  "inputs": "@join(body('Select_notes_1'), '<br>')",
                   "runAfter": {
                     "Select_notes_1": [
                       "Succeeded"
                     ]
                   },
-                  "type": "Compose",
-                  "inputs": "@join(body('Select_notes_1'), '<br>')"
+                  "metadata": {
+                    "operationMetadataId": "7fd1d4b7-0c59-4210-b571-7238de039f16"
+                  }
                 },
                 "Update_a_row": {
-                  "runAfter": {
-                    "Notes_history_1": [
-                      "Succeeded"
-                    ]
-                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -399,14 +422,17 @@
                       "operationId": "UpdateOnlyRecord",
                       "connectionName": "shared_commondataserviceforapps"
                     }
-                  }
-                },
-                "Post_message_in_a_chat_or_channel_1": {
+                  },
                   "runAfter": {
-                    "Update_a_row": [
+                    "Notes_history_1": [
                       "Succeeded"
                     ]
                   },
+                  "metadata": {
+                    "operationMetadataId": "a66c008c-9a80-4128-a927-6139df0d8e6f"
+                  }
+                },
+                "Post_message_in_a_chat_or_channel_1": {
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -420,6 +446,58 @@
                       "operationId": "PostMessageToConversation",
                       "connectionName": "shared_teams"
                     }
+                  },
+                  "runAfter": {
+                    "Update_a_row": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "97512f38-907e-44f9-a07e-ae3a042b0148"
+                  }
+                }
+              },
+              "else": {
+                "actions": {
+                  "Set_isValid_variable_": {
+                    "type": "SetVariable",
+                    "inputs": {
+                      "name": "isValid",
+                      "value": "@and(\r\n  not(empty(trim(variables('notes')))),\r\n  lessOrEquals(length(variables('notes')), 3900),\r\n  or(\r\n    not(equals(variables('action'), 'transfer')),\r\n    and(\r\n      not(empty(variables('transferTo'))),\r\n      not(equals(toLower(variables('transferTo')), toLower(outputs('Get_assignee')?['body/f26c_employeeid'])))\r\n    )\r\n  )\r\n)"
+                    },
+                    "runAfter": {
+                      "Set_transferTo_variable_": [
+                        "Succeeded"
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "f7e3b0ef-1862-4270-8cf8-f79b5304842c"
+                    }
+                  },
+                  "Set_errorMessage_variable_": {
+                    "type": "SetVariable",
+                    "inputs": {
+                      "name": "errorMessage",
+                      "value": "@if(variables('isValid'), '', if(and(equals(variables('action'), 'transfer'), empty(variables('transferTo'))), 'Please select a person to transfer this ticket to.', if(empty(trim(variables('notes'))), 'Please add work notes.', if(greater(length(variables('notes')), 4000), 'Work notes are too long. Please keep them under 4000 characters or save the first part and write out the second.', 'You cannot transfer a ticket to yourself. Please choose someone else.'))))"
+                    },
+                    "runAfter": {
+                      "Set_isValid_variable_": [
+                        "Succeeded"
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "e9702769-68df-4928-a945-3739745c8126"
+                    }
+                  },
+                  "Set_transferTo_variable_": {
+                    "type": "SetVariable",
+                    "inputs": {
+                      "name": "transferTo",
+                      "value": "@coalesce(outputs('Response_card')?['body/data/transferTo'], '')"
+                    },
+                    "metadata": {
+                      "operationMetadataId": "15535afc-679f-4a84-8ffb-d3d7c8bd23a7"
+                    }
                   }
                 }
               },
@@ -428,61 +506,9 @@
                   "Succeeded"
                 ]
               },
-              "else": {
-                "actions": {
-                  "Set_isValid_variable_": {
-                    "runAfter": {
-                      "Set_transferTo_variable_": [
-                        "Succeeded"
-                      ]
-                    },
-                    "metadata": {
-                      "operationMetadataId": "f7e3b0ef-1862-4270-8cf8-f79b5304842c"
-                    },
-                    "type": "SetVariable",
-                    "inputs": {
-                      "name": "isValid",
-                      "value": "@and(\r\n  not(empty(trim(variables('notes')))),\r\n  or(\r\n    not(equals(variables('action'), 'transfer')),\r\n    and(\r\n      not(empty(variables('transferTo'))),\r\n      not(equals(toLower(variables('transferTo')), toLower(outputs('Get_assignee')?['body/f26c_employeeid'])))\r\n    )\r\n  )\r\n)"
-                    }
-                  },
-                  "Set_errorMessage_variable_": {
-                    "runAfter": {
-                      "Set_isValid_variable_": [
-                        "Succeeded"
-                      ]
-                    },
-                    "metadata": {
-                      "operationMetadataId": "e9702769-68df-4928-a945-3739745c8126"
-                    },
-                    "type": "SetVariable",
-                    "inputs": {
-                      "name": "errorMessage",
-                      "value": "@if(variables('isValid'), '', 'Please add notes, and choose a department if you are transferring. Then try again.')"
-                    }
-                  },
-                  "Set_transferTo_variable_": {
-                    "metadata": {
-                      "operationMetadataId": "15535afc-679f-4a84-8ffb-d3d7c8bd23a7"
-                    },
-                    "type": "SetVariable",
-                    "inputs": {
-                      "name": "transferTo",
-                      "value": "@coalesce(outputs('Response_card')?['body/data/transferTo'], '')"
-                    }
-                  }
-                }
-              },
-              "expression": {
-                "or": [
-                  {
-                    "equals": [
-                      "@variables('action')",
-                      "submit"
-                    ]
-                  }
-                ]
-              },
-              "type": "If"
+              "metadata": {
+                "operationMetadataId": "05a403e8-baaa-44dc-b86d-a67a341b350a"
+              }
             }
           },
           "runAfter": {
@@ -490,30 +516,30 @@
               "Succeeded"
             ]
           },
-          "expression": "@equals(variables('isValid'),true)",
-          "limit": {
-            "count": 5,
-            "timeout": "P7D"
-          },
           "metadata": {
             "operationMetadataId": "72102c7d-de74-47eb-9b14-494873b96148"
-          },
-          "type": "Until"
+          }
         },
         "Switch": {
-          "runAfter": {
-            "Do_until": [
-              "Succeeded"
-            ]
+          "type": "Switch",
+          "expression": "@variables('action')",
+          "default": {
+            "actions": {
+              "Terminate": {
+                "type": "Terminate",
+                "inputs": {
+                  "runStatus": "Failed"
+                },
+                "metadata": {
+                  "operationMetadataId": "097f1a93-c5c1-4a90-85f4-bcb8cdbc2c46"
+                }
+              }
+            }
           },
           "cases": {
             "Case_resolve": {
-              "case": "resolve",
               "actions": {
                 "Updates_a_ticket_to_closed": {
-                  "metadata": {
-                    "operationMetadataId": "c8823b22-ac83-4572-8be4-d65e9b276ec2"
-                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -527,17 +553,12 @@
                       "operationId": "UpdateOnlyRecord",
                       "connectionName": "shared_commondataserviceforapps"
                     }
+                  },
+                  "metadata": {
+                    "operationMetadataId": "c8823b22-ac83-4572-8be4-d65e9b276ec2"
                   }
                 },
                 "Add_a_new_row_to_TicketUpdates_table_2": {
-                  "runAfter": {
-                    "Updates_a_ticket_to_closed": [
-                      "Succeeded"
-                    ]
-                  },
-                  "metadata": {
-                    "operationMetadataId": "6fb3ba27-778b-40b7-bbd5-032b80844a16"
-                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -553,17 +574,22 @@
                       "operationId": "CreateRecord",
                       "connectionName": "shared_commondataserviceforapps"
                     }
+                  },
+                  "runAfter": {
+                    "Updates_a_ticket_to_closed": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "6fb3ba27-778b-40b7-bbd5-032b80844a16"
                   }
                 }
-              }
+              },
+              "case": "resolve"
             },
             "Case_skip": {
-              "case": "skip",
               "actions": {
                 "Updates_a_ticket_to_skip": {
-                  "metadata": {
-                    "operationMetadataId": "69741953-99ac-44ec-9ae8-7baf1d352b1e"
-                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -577,17 +603,12 @@
                       "operationId": "UpdateOnlyRecord",
                       "connectionName": "shared_commondataserviceforapps"
                     }
+                  },
+                  "metadata": {
+                    "operationMetadataId": "69741953-99ac-44ec-9ae8-7baf1d352b1e"
                   }
                 },
                 "Add_a_new_row_to_TicketUpdates_table_1": {
-                  "runAfter": {
-                    "Updates_a_ticket_to_skip": [
-                      "Succeeded"
-                    ]
-                  },
-                  "metadata": {
-                    "operationMetadataId": "9dbbe4eb-01e2-413f-b8c1-9243de5f2fd4"
-                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -603,17 +624,22 @@
                       "operationId": "CreateRecord",
                       "connectionName": "shared_commondataserviceforapps"
                     }
+                  },
+                  "runAfter": {
+                    "Updates_a_ticket_to_skip": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "9dbbe4eb-01e2-413f-b8c1-9243de5f2fd4"
                   }
                 }
-              }
+              },
+              "case": "skip"
             },
             "Case_transfer": {
-              "case": "transfer",
               "actions": {
                 "Get_new_assignee_": {
-                  "metadata": {
-                    "operationMetadataId": "c01b739c-668d-4562-9706-3853d71ec511"
-                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -625,17 +651,12 @@
                       "operationId": "GetItem",
                       "connectionName": "shared_commondataserviceforapps"
                     }
+                  },
+                  "metadata": {
+                    "operationMetadataId": "c01b739c-668d-4562-9706-3853d71ec511"
                   }
                 },
                 "Post_message_in_a_chat_or_channel": {
-                  "runAfter": {
-                    "Updates_a_ticket_for_transfer": [
-                      "Succeeded"
-                    ]
-                  },
-                  "metadata": {
-                    "operationMetadataId": "dcbdc737-ad69-49d1-bfda-556424381909"
-                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -649,14 +670,17 @@
                       "operationId": "PostMessageToConversation",
                       "connectionName": "shared_teams"
                     }
-                  }
-                },
-                "List_ticket_updates": {
+                  },
                   "runAfter": {
-                    "Add_a_new_row_to_TicketUpdates": [
+                    "Updates_a_ticket_for_transfer": [
                       "Succeeded"
                     ]
                   },
+                  "metadata": {
+                    "operationMetadataId": "dcbdc737-ad69-49d1-bfda-556424381909"
+                  }
+                },
+                "List_ticket_updates": {
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -669,38 +693,44 @@
                       "operationId": "ListRecords",
                       "connectionName": "shared_commondataserviceforapps"
                     }
+                  },
+                  "runAfter": {
+                    "Add_a_new_row_to_TicketUpdates": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "40ca7f2c-a232-4ebb-875b-6b05eb842470"
                   }
                 },
                 "Select_notes": {
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@outputs('List_ticket_updates')?['body/value']",
+                    "select": "@concat(\r\n  formatDateTime(item()?['f26c_updatedon'], 'yyyy-MM-dd HH:mm'),\r\n  ' - ',\r\n  coalesce(item()?['f26c_updatetext'], '')\r\n)"
+                  },
                   "runAfter": {
                     "List_ticket_updates": [
                       "Succeeded"
                     ]
                   },
-                  "type": "Select",
-                  "inputs": {
-                    "from": "@outputs('List_ticket_updates')?['body/value']",
-                    "select": "@concat(\r\n  formatDateTime(item()?['f26c_updatedon'], 'yyyy-MM-dd HH:mm'),\r\n  ' - ',\r\n  coalesce(item()?['f26c_updatetext'], '')\r\n)"
+                  "metadata": {
+                    "operationMetadataId": "db136326-20e8-49ba-b046-16b1e25f7987"
                   }
                 },
                 "Notes_history": {
+                  "type": "Compose",
+                  "inputs": "@join(body('Select_notes'), '<br>')",
                   "runAfter": {
                     "Select_notes": [
                       "Succeeded"
                     ]
                   },
-                  "type": "Compose",
-                  "inputs": "@join(body('Select_notes'), '<br>')"
+                  "metadata": {
+                    "operationMetadataId": "d98f25eb-3760-4f14-adaa-35e14c6a1bfb"
+                  }
                 },
                 "Updates_a_ticket_for_transfer": {
-                  "runAfter": {
-                    "Notes_history": [
-                      "Succeeded"
-                    ]
-                  },
-                  "metadata": {
-                    "operationMetadataId": "a3dfe1a9-2b61-4112-9ce7-dc36aa5c5760"
-                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -715,14 +745,17 @@
                       "operationId": "UpdateOnlyRecord",
                       "connectionName": "shared_commondataserviceforapps"
                     }
-                  }
-                },
-                "Add_a_new_row_to_TicketUpdates": {
+                  },
                   "runAfter": {
-                    "Get_new_assignee_": [
+                    "Notes_history": [
                       "Succeeded"
                     ]
                   },
+                  "metadata": {
+                    "operationMetadataId": "a3dfe1a9-2b61-4112-9ce7-dc36aa5c5760"
+                  }
+                },
+                "Add_a_new_row_to_TicketUpdates": {
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -738,29 +771,28 @@
                       "operationId": "CreateRecord",
                       "connectionName": "shared_commondataserviceforapps"
                     }
+                  },
+                  "runAfter": {
+                    "Get_new_assignee_": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "84c9ea8d-18dc-4dbb-9e03-d8ff0e484a34"
                   }
                 }
-              }
+              },
+              "case": "transfer"
             }
           },
-          "default": {
-            "actions": {
-              "Terminate": {
-                "metadata": {
-                  "operationMetadataId": "097f1a93-c5c1-4a90-85f4-bcb8cdbc2c46"
-                },
-                "type": "Terminate",
-                "inputs": {
-                  "runStatus": "Failed"
-                }
-              }
-            }
+          "runAfter": {
+            "Do_until": [
+              "Succeeded"
+            ]
           },
-          "expression": "@variables('action')",
           "metadata": {
             "operationMetadataId": "847181b3-c367-4d62-bbc0-3e2d6e0429a1"
-          },
-          "type": "Switch"
+          }
         }
       },
       "outputs": {}

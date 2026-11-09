@@ -5,8 +5,10 @@
     <LocalizedNames>
       <LocalizedName description="F26Capstone" languagecode="1033" />
     </LocalizedNames>
-    <Descriptions />
-    <Version>1.0.0.1</Version>
+    <Descriptions>
+      <Description description="Upgrade of F26Capstone" languagecode="1033" />
+    </Descriptions>
+    <Version>1.1.0.0</Version>
     <Managed>0</Managed>
     <Publisher>
       <UniqueName>F26Capstone</UniqueName>

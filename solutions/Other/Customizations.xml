@@ -22,6 +22,14 @@
       <statecode>0</statecode>
       <statuscode>1</statuscode>
     </connectionreference>
+    <connectionreference connectionreferencelogicalname="f26c_sharedcommondataserviceforapps_a1cfc">
+      <connectionreferencedisplayname>Microsoft Dataverse F26Capstone-a1cfc</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps</connectorid>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
     <connectionreference connectionreferencelogicalname="new_sharedazureblob_77298">
       <connectionreferencedisplayname>Azure Blob Storage</connectionreferencedisplayname>
       <connectorid>/providers/Microsoft.PowerApps/apis/shared_azureblob</connectorid>
