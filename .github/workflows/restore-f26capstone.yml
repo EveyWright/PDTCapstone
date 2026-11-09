@@ -25,3 +25,14 @@ jobs:
           solution-file: F26Capstone_solution.zip
           force-overwrite: true
           publish-changes: true
+          connection-references: |
+            [
+              {
+                "logicalName": "new_sharedcommondataserviceforapps_38a62",
+                "connectionId": ${{ secrets.DATAVERSE_CONNECTION_ID }}
+              },
+              {
+                "logicalName": "new_sharedteams_19643",
+                "connectionId": ${{ secrets.TEAMS_CONNECTION_ID }}
+              }
+            ]
