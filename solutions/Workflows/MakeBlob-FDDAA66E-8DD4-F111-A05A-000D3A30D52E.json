@@ -1,0 +1,158 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_azureblob-1": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedazureblob_77298"
+        },
+        "api": {
+          "name": "shared_azureblob"
+        }
+      },
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "cr36f_phil_eB7BM0.cr.shared_commondataserviceforapps.99645add-b9a7-436f-b170-61b1e4c789c2"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "0f2abbf2-9ac3-43d6-b1ee-e53f59a1feca"
+          },
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "description": "Please select file or image",
+                  "title": "File",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "contentBytes": {
+                      "type": "string",
+                      "format": "byte"
+                    }
+                  },
+                  "x-ms-content-hint": "FILE",
+                  "x-ms-dynamically-added": true
+                },
+                "text": {
+                  "description": "Please enter your ticket ID",
+                  "title": "Id",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "required": [
+                "file",
+                "text"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Compose_GUID": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "49e44354-a42f-4495-9b50-c64a69798a36"
+          },
+          "type": "Compose",
+          "inputs": "@guid()"
+        },
+        "Compose_Name": {
+          "runAfter": {
+            "Compose_GUID": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "3be4ea55-b624-4e91-a7e7-850f3c2c4622"
+          },
+          "type": "Compose",
+          "inputs": "@concat(outputs('Compose_GUID'), '.pdf')"
+        },
+        "Create_blob_(V2)": {
+          "runAfter": {
+            "Compose_Name": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "fe1331d2-4655-4c3c-8d0b-202804648ee3"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "AccountNameFromSettings",
+              "folderPath": "/disruption-images",
+              "name": "@outputs('Compose_Name')",
+              "body": "@triggerBody()?['file']?['contentBytes']"
+            },
+            "host": {
+              "connectionName": "shared_azureblob-1",
+              "operationId": "CreateFile_V2",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_azureblob"
+            }
+          },
+          "runtimeConfiguration": {
+            "contentTransfer": {
+              "transferMode": "Chunked"
+            }
+          }
+        },
+        "Add_a_new_row": {
+          "runAfter": {
+            "Create_blob_(V2)": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "ea61505b-7ff2-4e9f-9298-c0eef0253f1e"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_attachmentblobs",
+              "item/f26c_blobid": "@outputs('Compose_GUID')",
+              "item/f26c_id": "@triggerBody()?['text']"
+            },
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "CreateRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            }
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

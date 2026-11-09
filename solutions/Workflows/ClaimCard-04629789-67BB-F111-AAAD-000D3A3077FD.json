@@ -2,42 +2,39 @@
   "properties": {
     "connectionReferences": {
       "shared_commondataserviceforapps": {
-        "runtimeSource": "embedded",
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
         "connection": {
           "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_38a62"
         },
-        "api": {
-          "name": "shared_commondataserviceforapps"
-        }
+        "runtimeSource": "embedded"
       },
       "shared_teams": {
-        "runtimeSource": "embedded",
+        "api": {
+          "name": "shared_teams"
+        },
         "connection": {
           "connectionReferenceLogicalName": "new_sharedteams_19643"
         },
-        "api": {
-          "name": "shared_teams"
-        }
+        "runtimeSource": "embedded"
       }
     },
     "definition": {
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "contentVersion": "1.0.0.0",
       "parameters": {
-        "$connections": {
-          "defaultValue": {},
-          "type": "Object"
-        },
         "$authentication": {
           "defaultValue": {},
           "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
         }
       },
       "triggers": {
         "When_a_new_ticket_is_added_to_database": {
-          "metadata": {
-            "operationMetadataId": "c0a6b180-ff60-4451-bbcf-f1bfdc087d9f"
-          },
           "type": "OpenApiConnectionWebhook",
           "inputs": {
             "parameters": {
@@ -47,19 +44,18 @@
               "subscriptionRequest/name": "04629789-67bb-f111-aaad-000d3a3077fd"
             },
             "host": {
-              "connectionName": "shared_commondataserviceforapps",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "SubscribeWebhookTrigger",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+              "connectionName": "shared_commondataserviceforapps"
             }
+          },
+          "metadata": {
+            "operationMetadataId": "c0a6b180-ff60-4451-bbcf-f1bfdc087d9f"
           }
         }
       },
       "actions": {
         "Get_new_ticket": {
-          "runAfter": {},
-          "metadata": {
-            "operationMetadataId": "4f625d32-32a4-4f35-82ae-1f6452a9bb71"
-          },
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
@@ -67,21 +63,17 @@
               "recordId": "@triggerOutputs()?['body/f26c_ticketid']"
             },
             "host": {
-              "connectionName": "shared_commondataserviceforapps",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "GetItem",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+              "connectionName": "shared_commondataserviceforapps"
             }
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "4f625d32-32a4-4f35-82ae-1f6452a9bb71"
           }
         },
         "Claim_card": {
-          "runAfter": {
-            "Get_department": [
-              "Succeeded"
-            ]
-          },
-          "metadata": {
-            "operationMetadataId": "99b91fb2-d5e4-40b3-8342-144cfe4c8e9b"
-          },
           "type": "OpenApiConnectionWebhook",
           "inputs": {
             "parameters": {
@@ -92,21 +84,21 @@
               "body/body/recipient/recipient": "19:fada0b28de584be0a632ecec0e924bc3@thread.v2"
             },
             "host": {
-              "connectionName": "shared_teams",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
               "operationId": "PostCardAndWaitForResponse",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+              "connectionName": "shared_teams"
             }
-          }
-        },
-        "Update_a_tickets_status_and_update_who_has_taken_the_ticket": {
+          },
           "runAfter": {
-            "List_employees": [
+            "Get_department": [
               "Succeeded"
             ]
           },
           "metadata": {
-            "operationMetadataId": "3d113a03-01bf-45d7-aad5-b68c1eb9d0c0"
-          },
+            "operationMetadataId": "99b91fb2-d5e4-40b3-8342-144cfe4c8e9b"
+          }
+        },
+        "Update_a_tickets_status_and_update_who_has_taken_the_ticket": {
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
@@ -116,21 +108,21 @@
               "item/f26c_AssignedTo@odata.bind": "@concat('f26c_employees(', first(outputs('List_employees')?['body/value'])?['f26c_employeeid'], ')')"
             },
             "host": {
-              "connectionName": "shared_commondataserviceforapps",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "UpdateOnlyRecord",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+              "connectionName": "shared_commondataserviceforapps"
             }
-          }
-        },
-        "List_employees": {
+          },
           "runAfter": {
-            "Claim_card": [
+            "List_employees": [
               "Succeeded"
             ]
           },
           "metadata": {
-            "operationMetadataId": "eaa2a21c-bdd2-407a-aaaa-42d55a96e490"
-          },
+            "operationMetadataId": "3d113a03-01bf-45d7-aad5-b68c1eb9d0c0"
+          }
+        },
+        "List_employees": {
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
@@ -139,21 +131,21 @@
               "$top": 1
             },
             "host": {
-              "connectionName": "shared_commondataserviceforapps",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "ListRecords",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+              "connectionName": "shared_commondataserviceforapps"
             }
-          }
-        },
-        "Get_department": {
+          },
           "runAfter": {
-            "Get_new_ticket": [
+            "Claim_card": [
               "Succeeded"
             ]
           },
           "metadata": {
-            "operationMetadataId": "a114483d-3fec-4c6e-b117-9a904ebb7d6f"
-          },
+            "operationMetadataId": "eaa2a21c-bdd2-407a-aaaa-42d55a96e490"
+          }
+        },
+        "Get_department": {
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
@@ -161,21 +153,21 @@
               "recordId": "@outputs('Get_new_ticket')?['body/_f26c_department_value']"
             },
             "host": {
-              "connectionName": "shared_commondataserviceforapps",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "GetItem",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+              "connectionName": "shared_commondataserviceforapps"
             }
-          }
-        },
-        "Add_a_new_row_to_TicketUpdates_table": {
+          },
           "runAfter": {
-            "Update_a_tickets_status_and_update_who_has_taken_the_ticket": [
+            "Get_new_ticket": [
               "Succeeded"
             ]
           },
           "metadata": {
-            "operationMetadataId": "7094f028-8868-4061-a719-1cfb6acfc22d"
-          },
+            "operationMetadataId": "a114483d-3fec-4c6e-b117-9a904ebb7d6f"
+          }
+        },
+        "Add_a_new_row_to_TicketUpdates_table": {
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
@@ -187,16 +179,24 @@
               "item/f26c_id": ""
             },
             "host": {
-              "connectionName": "shared_commondataserviceforapps",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "CreateRecord",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+              "connectionName": "shared_commondataserviceforapps"
             }
+          },
+          "runAfter": {
+            "Update_a_tickets_status_and_update_who_has_taken_the_ticket": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "7094f028-8868-4061-a719-1cfb6acfc22d"
           }
         }
       },
       "outputs": {}
     },
-    "templateName": ""
+    "templateName": null
   },
   "schemaVersion": "1.0.0.0"
 }
