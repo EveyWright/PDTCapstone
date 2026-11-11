@@ -5,8 +5,10 @@
     <LocalizedNames>
       <LocalizedName description="F26Capstone" languagecode="1033" />
     </LocalizedNames>
-    <Descriptions />
-    <Version>1.0.0.1</Version>
+    <Descriptions>
+      <Description description="Upgrade of F26Capstone" languagecode="1033" />
+    </Descriptions>
+    <Version>1.1.0.0</Version>
     <Managed>0</Managed>
     <Publisher>
       <UniqueName>F26Capstone</UniqueName>
@@ -89,6 +91,7 @@
       <RootComponent type="29" id="{6104d89b-87d4-f111-a05a-000d3a30d52e}" behavior="0" />
       <RootComponent type="29" id="{c6a2df6a-94d4-f111-a05a-000d3a30d52e}" behavior="0" />
       <RootComponent type="29" id="{dce3b5b5-6ac2-f111-aaad-70a8a59b49cc}" behavior="0" />
+      <RootComponent type="29" id="{ea17718d-95dd-f111-84e8-000d3a30d52e}" behavior="0" />
       <RootComponent type="29" id="{fddaa66e-8dd4-f111-a05a-000d3a30d52e}" behavior="0" />
       <RootComponent type="300" schemaName="f26c_disruptiontrackercanv_501c2" behavior="0" />
       <RootComponent type="431" schemaName="f26c_attachment f26c_image" behavior="0" />

@@ -62,7 +62,7 @@
       "actions": {
         "Initialize_isValid_variable": {
           "runAfter": {
-            "Get_assignee": [
+            "Get_Submitter_Email": [
               "Succeeded"
             ]
           },
@@ -198,7 +198,7 @@
         },
         "List_employees": {
           "runAfter": {
-            "Initialize_transferTo_variable": [
+            "Initialize_variable": [
               "Succeeded"
             ]
           },
@@ -248,7 +248,7 @@
                 "parameters": {
                   "poster": "Flow bot",
                   "location": "Chat with Flow bot",
-                  "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"@{variables('errorMessage')}\", \"color\": \"Attention\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"You claimed this issue\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"Ticket: @{triggerOutputs()?['body/f26c_id']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"@{triggerOutputs()?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"Input.Text\", \"id\": \"notes\", \"label\": \"Work notes (required)\", \"placeholder\": \"What was done to solve the issue, why you are skipping, or why you are transferring. Keep it below 4000 characters.\", \"isMultiline\": true },\n    {\n      \"type\": \"Input.ChoiceSet\",\n      \"id\": \"transferTo\",\n      \"label\": \"Transfer to (only for Transfer)\",\n      \"placeholder\": \"Select a person\",\n      \"choices\": @{body('Select')}\n    }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Mark resolved\", \"data\": { \"action\": \"resolve\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Skip\", \"data\": { \"action\": \"skip\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Transfer\", \"data\": { \"action\": \"transfer\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Submit\", \"data\": { \"action\": \"submit\" } }\n  ]\n}",
+                  "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"@{variables('errorMessage')}\", \"color\": \"Attention\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"You claimed this issue\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"Ticket: @{triggerOutputs()?['body/f26c_id']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"@{triggerOutputs()?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"Input.Text\", \"id\": \"notes\", \"label\": \"Work notes (required)\", \"placeholder\": \"What was done to solve the issue, why you are skipping, or why you are transferring.\", \"isMultiline\": true, \"maxLength\": 3900 },\n    {\n      \"type\": \"Input.ChoiceSet\",\n      \"id\": \"transferTo\",\n      \"label\": \"Transfer to (only for Transfer)\",\n      \"placeholder\": \"Select a person\",\n      \"choices\": @{body('Select')}\n    }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Mark resolved\", \"data\": { \"action\": \"resolve\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Skip\", \"data\": { \"action\": \"skip\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Transfer\", \"data\": { \"action\": \"transfer\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Submit\", \"data\": { \"action\": \"submit\" } }\n  ]\n}",
                   "body/body/updateMessage": "Thank you for looking into the issue!",
                   "body/body/recipient/to": "@outputs('Get_assignee')?['body/f26c_email']"
                 },
@@ -298,13 +298,12 @@
                   "type": "SetVariable",
                   "inputs": {
                     "name": "isValid",
-                    "value": "@and(\r\n  not(empty(trim(variables('notes')))),\r\n  not(equals(variables('action'), 'submit'))\r\n)"
-                  },
-                  "description": ""
+                    "value": "@false"
+                  }
                 },
                 "Set_errorMessage_variable__1": {
                   "runAfter": {
-                    "Set_isValid_variable__1": [
+                    "Set_isValidNote": [
                       "Succeeded"
                     ]
                   },
@@ -314,112 +313,166 @@
                   "type": "SetVariable",
                   "inputs": {
                     "name": "errorMessage",
-                    "value": "@if(variables('isValid'), '', '')"
+                    "value": "@if(variables('isValidNote'), '', if(empty(trim(variables('notes'))), 'Please add work notes.', if(greater(length(variables('notes')), 4000), 'Work notes are too long. Please keep them under 4000 characters or save the first part and write out the second.')))"
                   }
                 },
-                "Add_a_new_row": {
+                "Condition_1": {
+                  "actions": {
+                    "Add_a_new_ticket_update": {
+                      "metadata": {
+                        "operationMetadataId": "cf2a1518-1655-41d9-b929-e8ad4e07f1f4"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "entityName": "f26c_ticketupdates",
+                          "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_ticket')?['inputs']?['parameters']?['recordId'], ')')",
+                          "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', outputs('Get_assignee')?['body/f26c_employeeid'], ')')",
+                          "item/f26c_updatedon": "@utcNow()",
+                          "item/f26c_updatetype": 751610000,
+                          "item/f26c_updatetext": "@concat(outputs('Get_assignee')?['body/f26c_name'], ': ', variables('notes'))"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "connectionName": "shared_commondataserviceforapps"
+                        }
+                      }
+                    },
+                    "Get_all_ticket_updates_for_this_ticket": {
+                      "runAfter": {
+                        "Add_a_new_ticket_update": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "bb65cf49-15f1-4984-8a4c-2d0af3a7c522"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "entityName": "f26c_ticketupdates",
+                          "$filter": "_f26c_ticketid_value eq '@{triggerOutputs()?['body/f26c_ticketid']}' and f26c_updatetext ne null",
+                          "$orderby": "f26c_updatedon asc"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "ListRecords",
+                          "connectionName": "shared_commondataserviceforapps"
+                        }
+                      }
+                    },
+                    "Create_Ticket_History": {
+                      "runAfter": {
+                        "Get_all_ticket_updates_for_this_ticket": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "b76bf2dc-2dfb-48c2-8e58-de83b671d2b8"
+                      },
+                      "type": "Select",
+                      "inputs": {
+                        "from": "@outputs('Get_all_ticket_updates_for_this_ticket')?['body/value']",
+                        "select": "@concat(\r\n  formatDateTime(item()?['f26c_updatedon'], 'yyyy-MM-dd HH:mm'),\r\n  ' - ',\r\n  coalesce(item()?['f26c_updatetext'], '')\r\n)"
+                      }
+                    },
+                    "Notes_history_1": {
+                      "runAfter": {
+                        "Create_Ticket_History": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "7fd1d4b7-0c59-4210-b571-7238de039f16"
+                      },
+                      "type": "Compose",
+                      "inputs": "@join(body('Create_Ticket_History'), '<br>')"
+                    },
+                    "Update_a_row": {
+                      "runAfter": {
+                        "Notes_history_1": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "a66c008c-9a80-4128-a927-6139df0d8e6f"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "entityName": "f26c_tickets",
+                          "recordId": "@outputs('Get_ticket')?['body/f26c_ticketid']",
+                          "item/f26c_worknotes": "@variables('notes')"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "UpdateOnlyRecord",
+                          "connectionName": "shared_commondataserviceforapps"
+                        }
+                      }
+                    },
+                    "Post_message_with_the_new_work_notes_history": {
+                      "runAfter": {
+                        "Update_a_row": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "97512f38-907e-44f9-a07e-ae3a042b0148"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "poster": "Flow bot",
+                          "location": "Chat with Flow bot",
+                          "body/recipient": "@outputs('Get_assignee')?['body/f26c_email']",
+                          "body/messageBody": "<p class=\"editor-paragraph\">You have submitted a note to this ticket.<br><br>Ticket: @{outputs('Update_a_row')?['body/f26c_title']}<br>Ticket ID: @{outputs('Update_a_row')?['body/f26c_id']}</p><p class=\"editor-paragraph\"><br>Work notes history :<br>@{outputs('Notes_history_1')}<br><br>You will receive a card shortly with options to resolve, skip, transfer it, or submit another note.</p>"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+                          "operationId": "PostMessageToConversation",
+                          "connectionName": "shared_teams"
+                        }
+                      }
+                    }
+                  },
                   "runAfter": {
                     "Set_errorMessage_variable__1": [
                       "Succeeded"
                     ]
                   },
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "parameters": {
-                      "entityName": "f26c_ticketupdates",
-                      "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_ticket')?['inputs']?['parameters']?['recordId'], ')')",
-                      "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', outputs('Get_assignee')?['body/f26c_employeeid'], ')')",
-                      "item/f26c_updatedon": "@utcNow()",
-                      "item/f26c_updatetype": 751610000,
-                      "item/f26c_updatetext": "@concat(outputs('Get_assignee')?['body/f26c_name'], ': ', variables('notes'))"
-                    },
-                    "host": {
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
-                      "operationId": "CreateRecord",
-                      "connectionName": "shared_commondataserviceforapps"
-                    }
-                  }
+                  "else": {
+                    "actions": {}
+                  },
+                  "expression": {
+                    "and": [
+                      {
+                        "equals": [
+                          "@variables('isValidNote')",
+                          "@true"
+                        ]
+                      }
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "4f5b4122-df00-4283-99f8-2d164c268986"
+                  },
+                  "type": "If"
                 },
-                "List_rows": {
+                "Set_isValidNote": {
                   "runAfter": {
-                    "Add_a_new_row": [
+                    "Set_isValid_variable__1": [
                       "Succeeded"
                     ]
                   },
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "parameters": {
-                      "entityName": "f26c_ticketupdates",
-                      "$filter": "_f26c_ticketid_value eq '@{triggerOutputs()?['body/f26c_ticketid']}' and f26c_updatetext ne null",
-                      "$orderby": "f26c_updatedon asc"
-                    },
-                    "host": {
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
-                      "operationId": "ListRecords",
-                      "connectionName": "shared_commondataserviceforapps"
-                    }
-                  }
-                },
-                "Select_notes_1": {
-                  "runAfter": {
-                    "List_rows": [
-                      "Succeeded"
-                    ]
+                  "metadata": {
+                    "operationMetadataId": "c6903e35-0c08-4c53-9942-f2579dac70d4"
                   },
-                  "type": "Select",
+                  "type": "SetVariable",
                   "inputs": {
-                    "from": "@outputs('List_rows')?['body/value']",
-                    "select": "@concat(\r\n  formatDateTime(item()?['f26c_updatedon'], 'yyyy-MM-dd HH:mm'),\r\n  ' - ',\r\n  coalesce(item()?['f26c_updatetext'], '')\r\n)"
-                  }
-                },
-                "Notes_history_1": {
-                  "runAfter": {
-                    "Select_notes_1": [
-                      "Succeeded"
-                    ]
-                  },
-                  "type": "Compose",
-                  "inputs": "@join(body('Select_notes_1'), '<br>')"
-                },
-                "Update_a_row": {
-                  "runAfter": {
-                    "Notes_history_1": [
-                      "Succeeded"
-                    ]
-                  },
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "parameters": {
-                      "entityName": "f26c_tickets",
-                      "recordId": "@outputs('Get_ticket')?['body/f26c_ticketid']",
-                      "item/f26c_worknotes": "@variables('notes')"
-                    },
-                    "host": {
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
-                      "operationId": "UpdateOnlyRecord",
-                      "connectionName": "shared_commondataserviceforapps"
-                    }
-                  }
-                },
-                "Post_message_in_a_chat_or_channel_1": {
-                  "runAfter": {
-                    "Update_a_row": [
-                      "Succeeded"
-                    ]
-                  },
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "parameters": {
-                      "poster": "Flow bot",
-                      "location": "Chat with Flow bot",
-                      "body/recipient": "@outputs('Get_assignee')?['body/f26c_email']",
-                      "body/messageBody": "<p class=\"editor-paragraph\">You have submitted a note to this ticket.<br><br>Ticket: @{outputs('Update_a_row')?['body/f26c_title']}<br>Ticket ID: @{outputs('Update_a_row')?['body/f26c_id']}</p><p class=\"editor-paragraph\"><br>Work notes history :<br>@{outputs('Notes_history_1')}<br><br>You will receive a card shortly with options to resolve, skip, transfer it, or submit another note.</p>"
-                    },
-                    "host": {
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
-                      "operationId": "PostMessageToConversation",
-                      "connectionName": "shared_teams"
-                    }
+                    "name": "isValidNote",
+                    "value": "@and(less(length(variables('notes')), 4000), not(empty(trim(variables('notes')))))"
                   }
                 }
               },
@@ -430,6 +483,16 @@
               },
               "else": {
                 "actions": {
+                  "Set_transferTo_variable_": {
+                    "metadata": {
+                      "operationMetadataId": "15535afc-679f-4a84-8ffb-d3d7c8bd23a7"
+                    },
+                    "type": "SetVariable",
+                    "inputs": {
+                      "name": "transferTo",
+                      "value": "@coalesce(outputs('Response_card')?['body/data/transferTo'], '')"
+                    }
+                  },
                   "Set_isValid_variable_": {
                     "runAfter": {
                       "Set_transferTo_variable_": [
@@ -442,7 +505,7 @@
                     "type": "SetVariable",
                     "inputs": {
                       "name": "isValid",
-                      "value": "@and(\r\n  not(empty(trim(variables('notes')))),\r\n  or(\r\n    not(equals(variables('action'), 'transfer')),\r\n    and(\r\n      not(empty(variables('transferTo'))),\r\n      not(equals(toLower(variables('transferTo')), toLower(outputs('Get_assignee')?['body/f26c_employeeid'])))\r\n    )\r\n  )\r\n)"
+                      "value": "@and(\r\n  not(empty(trim(variables('notes')))),\r\n  lessOrEquals(length(variables('notes')), 3900),\r\n  or(\r\n    not(equals(variables('action'), 'transfer')),\r\n    and(\r\n      not(empty(variables('transferTo'))),\r\n      not(equals(toLower(variables('transferTo')), toLower(outputs('Get_assignee')?['body/f26c_employeeid'])))\r\n    )\r\n  )\r\n)"
                     }
                   },
                   "Set_errorMessage_variable_": {
@@ -457,17 +520,7 @@
                     "type": "SetVariable",
                     "inputs": {
                       "name": "errorMessage",
-                      "value": "@if(variables('isValid'), '', 'Please add notes, and choose a department if you are transferring. Then try again.')"
-                    }
-                  },
-                  "Set_transferTo_variable_": {
-                    "metadata": {
-                      "operationMetadataId": "15535afc-679f-4a84-8ffb-d3d7c8bd23a7"
-                    },
-                    "type": "SetVariable",
-                    "inputs": {
-                      "name": "transferTo",
-                      "value": "@coalesce(outputs('Response_card')?['body/data/transferTo'], '')"
+                      "value": "@if(variables('isValid'), '', if(and(equals(variables('action'), 'transfer'), empty(variables('transferTo'))), 'Please select a person to transfer this ticket to.', if(empty(trim(variables('notes'))), 'Please add work notes.', if(greater(length(variables('notes')), 4000), 'Work notes are too long. Please keep them under 4000 characters or save the first part and write out the second.', 'You cannot transfer a ticket to yourself. Please choose someone else.'))))"
                     }
                   }
                 }
@@ -481,6 +534,9 @@
                     ]
                   }
                 ]
+              },
+              "metadata": {
+                "operationMetadataId": "05a403e8-baaa-44dc-b86d-a67a341b350a"
               },
               "type": "If"
             }
@@ -552,6 +608,30 @@
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                       "operationId": "CreateRecord",
                       "connectionName": "shared_commondataserviceforapps"
+                    }
+                  }
+                },
+                "Post_message_to_ticket_submitter_after_resolution": {
+                  "runAfter": {
+                    "Add_a_new_row_to_TicketUpdates_table_2": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "76343a3a-012f-40a1-a354-910382393453"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "poster": "Flow bot",
+                      "location": "Chat with Flow bot",
+                      "body/recipient": "@outputs('Updates_a_ticket_to_closed')?['body/f26c_submittedby']",
+                      "body/messageBody": "<p class=\"editor-paragraph\">A ticket you submitted has been resolved!</p><p class=\"editor-paragraph\"><br>Ticket: @{outputs('Updates_a_ticket_to_closed')?['body/f26c_title']}<br>Ticket ID: @{outputs('Get_ticket')?['body/f26c_id']}</p>"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+                      "operationId": "PostMessageToConversation",
+                      "connectionName": "shared_teams"
                     }
                   }
                 }
@@ -657,6 +737,9 @@
                       "Succeeded"
                     ]
                   },
+                  "metadata": {
+                    "operationMetadataId": "40ca7f2c-a232-4ebb-875b-6b05eb842470"
+                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -677,6 +760,9 @@
                       "Succeeded"
                     ]
                   },
+                  "metadata": {
+                    "operationMetadataId": "db136326-20e8-49ba-b046-16b1e25f7987"
+                  },
                   "type": "Select",
                   "inputs": {
                     "from": "@outputs('List_ticket_updates')?['body/value']",
@@ -688,6 +774,9 @@
                     "Select_notes": [
                       "Succeeded"
                     ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "d98f25eb-3760-4f14-adaa-35e14c6a1bfb"
                   },
                   "type": "Compose",
                   "inputs": "@join(body('Select_notes'), '<br>')"
@@ -722,6 +811,9 @@
                     "Get_new_assignee_": [
                       "Succeeded"
                     ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "84c9ea8d-18dc-4dbb-9e03-d8ff0e484a34"
                   },
                   "type": "OpenApiConnection",
                   "inputs": {
@@ -761,6 +853,47 @@
             "operationMetadataId": "847181b3-c367-4d62-bbc0-3e2d6e0429a1"
           },
           "type": "Switch"
+        },
+        "Initialize_variable": {
+          "runAfter": {
+            "Initialize_transferTo_variable": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "e67fd486-7b87-4596-b163-9213f5460fc7"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "isValidNote",
+                "type": "boolean"
+              }
+            ]
+          }
+        },
+        "Get_Submitter_Email": {
+          "runAfter": {
+            "Get_assignee": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "f2887827-ec47-42fe-a5cf-1afba6bbc485"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_tickets",
+              "$select": "f26c_submittedby"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          }
         }
       },
       "outputs": {}

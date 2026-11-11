@@ -86,7 +86,7 @@
                     <row>
                       <cell id="{5fa91e6b-6587-46f7-8554-2ba8454a31eb}">
                         <labels>
-                          <label description="CreatedBy" languagecode="1033" />
+                          <label description="CreatedBy_Old" languagecode="1033" />
                         </labels>
                         <control id="f26c_createdby" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="f26c_createdby" />
                       </cell>
