@@ -2,6 +2,15 @@ name: Restore F26Capstone Solution
 
 on:
   workflow_dispatch:
+    inputs:
+      solution-choice:
+        description: 'Which solution to restore'
+        required: true
+        default: 'F26Capstone_solution.zip'
+        type: choice
+        options:
+          - F26Capstone_solution.zip
+          - New_F26Capstone_solution.zip
 
 jobs:
   restore:
@@ -22,7 +31,7 @@ jobs:
           client-secret: ${{ secrets.ACTIONS_CLIENT_SECRET }}
           tenant-id: ${{ secrets.TENANT_ID }}
 
-          solution-file: F26Capstone_solution.zip
+          solution-file: ${{ inputs.solution-choice }}
           force-overwrite: true
           publish-changes: true
           connection-references: |
