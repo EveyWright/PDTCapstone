@@ -1,0 +1,51 @@
+name: Backup F26Capstone Solution
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: '0 2 * * *'
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Power Platform Tools
+        uses: microsoft/powerplatform-actions/actions-install@v1
+        
+      - name: Remove Old Backup
+        run: |
+          if [ -f New_F26Capstone_solution.zip ]; then
+            rm New_F26Capstone_solution.zip
+          fi
+      
+      - name: Export Solution
+        uses: microsoft/powerplatform-actions/export-solution@v1
+        with:
+          environment-url: ${{ secrets.NEW_PDTCapstone_URL}}
+          app-id: ${{ secrets.ACTIONS_CLIENT_ID }}
+          client-secret: ${{ secrets.ACTIONS_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+
+          solution-name: F26Capstone
+          solution-output-file: New_F26Capstone_solution.zip
+          
+      - name: Unpack Solution
+        uses: microsoft/powerplatform-actions/unpack-solution@v1
+        with:
+          solution-file: New_F26Capstone_solution.zip
+          solution-folder: solutions
+
+      - name: Commit Changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add .
+          git diff --cached --quiet || git commit -m "Automated solution backup"
+
+          git push
