@@ -1,0 +1,1172 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_azureblob": {
+        "api": {
+          "name": "shared_azureblob"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedazureblob_daf13e48"
+        },
+        "runtimeSource": "invoker",
+        "connectionName": "shared-azureblob-ac6326e7-45af-4b12-a767-faae6f6d2c31"
+      },
+      "shared_commondataserviceforapps": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_27d78949"
+        },
+        "runtimeSource": "embedded",
+        "connectionName": "shared-commondataser-36235857-311c-4e11-b5d5-d73d61b380f5",
+        "impersonation": {
+          "source": "invoker"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "title": "Image",
+                  "type": "object",
+                  "properties": {
+                    "contentBytes": {
+                      "type": "string",
+                      "format": "byte"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "x-ms-content-hint": "FILE",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please select a file or imageThe image the user attached to their disruption report"
+                },
+                "text": {
+                  "title": "TicketID",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true,
+                  "description": "The Dataverse row ID of the disruption ticket this photo belongs to"
+                }
+              },
+              "required": [
+                "file",
+                "text"
+              ]
+            }
+          },
+          "metadata": {
+            "associatedData": {
+              "graph": {
+                "name": "Make Blob",
+                "nodes": [
+                  {
+                    "id": "start-30b9f7d9-4cc3-4e94-91fc-bba56c084577",
+                    "name": "When an agent calls the flow",
+                    "type": "start",
+                    "version": 1,
+                    "position": {
+                      "x": 250,
+                      "y": 306
+                    },
+                    "data": {
+                      "config": {
+                        "triggerType": "connector",
+                        "connector": {
+                          "apiName": "Skills",
+                          "operationName": "When_an_agent_calls_the_flow",
+                          "displayName": "When an agent calls the flow",
+                          "kind": "Skills",
+                          "inputs": {
+                            "schema": {
+                              "type": "object",
+                              "properties": {
+                                "file": {
+                                  "title": "Image",
+                                  "type": "object",
+                                  "properties": {
+                                    "contentBytes": {
+                                      "type": "string",
+                                      "format": "byte"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "x-ms-content-hint": "FILE",
+                                  "x-ms-dynamically-added": true,
+                                  "description": "Please select a file or imageThe image the user attached to their disruption report"
+                                },
+                                "text": {
+                                  "title": "TicketID",
+                                  "type": "string",
+                                  "x-ms-content-hint": "TEXT",
+                                  "x-ms-dynamically-added": true,
+                                  "description": "The Dataverse row ID of the disruption ticket this photo belongs to"
+                                }
+                              },
+                              "required": [
+                                "file",
+                                "text"
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "description": "Trigger output (schema determined by connector)"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 261,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "variable-b288531c-ab83-4aea-b0c2-ed93b06501fd",
+                    "name": "GUID",
+                    "type": "variable",
+                    "version": 1,
+                    "position": {
+                      "x": 587,
+                      "y": 306
+                    },
+                    "data": {
+                      "config": {
+                        "assignments": [
+                          {
+                            "id": "bd973c2b-65ff-48d0-b0aa-959dd5053f28",
+                            "variableName": "guid",
+                            "mode": "initialize",
+                            "type": "string",
+                            "value": "@guid()",
+                            "valueRich": {
+                              "segments": [
+                                {
+                                  "type": "token",
+                                  "value": "@guid()",
+                                  "tokenRef": {
+                                    "type": "function",
+                                    "stepId": "function",
+                                    "stepName": "String",
+                                    "outputName": "guid",
+                                    "outputType": "string",
+                                    "functionName": "guid",
+                                    "functionCategory": "string",
+                                    "rawExpression": "guid()"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "properties": {},
+                            "description": "Variables set by this node"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    },
+                    "selected": false
+                  },
+                  {
+                    "id": "variable-42943af0-8f56-487a-bbfc-f8403712053c",
+                    "name": "Name",
+                    "type": "variable",
+                    "version": 1,
+                    "position": {
+                      "x": 903,
+                      "y": 306
+                    },
+                    "data": {
+                      "config": {
+                        "assignments": [
+                          {
+                            "id": "9c679fb3-d527-4dd5-aa37-d38d3fef76fb",
+                            "variableName": "name",
+                            "mode": "initialize",
+                            "type": "string",
+                            "value": "@concat(variables('guid'), '.pdf')",
+                            "valueRich": {
+                              "segments": [
+                                {
+                                  "type": "token",
+                                  "value": "@concat(variables('guid'), '.pdf')",
+                                  "tokenRef": {
+                                    "type": "function",
+                                    "stepId": "function",
+                                    "stepName": "String",
+                                    "outputName": "concat",
+                                    "outputType": "string",
+                                    "functionName": "concat",
+                                    "functionCategory": "string",
+                                    "rawExpression": "concat(variables('guid'), '.pdf')"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "properties": {},
+                            "description": "Variables set by this node"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "connector-6f99baf1-47ea-486a-951e-b4c790d062b0",
+                    "name": "Create blob",
+                    "type": "connector",
+                    "version": 1,
+                    "position": {
+                      "x": 1219,
+                      "y": 306
+                    },
+                    "data": {
+                      "config": {
+                        "apiName": "shared_azureblob",
+                        "displayName": "Azure Blob Storage",
+                        "iconUri": "https://static.powerapps.com/resource/ppcr/releases/v1.0.1819/1.0.1819.4795/azureblob/icon.png",
+                        "brandColor": "#804998",
+                        "operationName": "CreateFile_V2",
+                        "operationType": "OpenApiConnection",
+                        "parametersSchema": {
+                          "type": "object",
+                          "properties": {
+                            "dataset": {
+                              "type": "string",
+                              "title": "Storage account name or blob endpoint",
+                              "x-ms-dynamic-list": {
+                                "operationId": "GetDataSets",
+                                "parameters": {},
+                                "itemsPath": "value",
+                                "itemValuePath": "Name",
+                                "itemTitlePath": "DisplayName"
+                              },
+                              "description": "Azure Storage account name or blob endpoint.",
+                              "minLength": 1,
+                              "x-ms-property-name-alias": "dataset"
+                            },
+                            "folderPath": {
+                              "type": "string",
+                              "title": "Folder path",
+                              "x-ms-dynamic-tree": {
+                                "settings": {
+                                  "canSelectParentNodes": true,
+                                  "canSelectLeafNodes": false
+                                },
+                                "open": {
+                                  "operationId": "ListAllRootFolders_V4",
+                                  "parameters": {
+                                    "dataset": {
+                                      "parameterReference": "dataset",
+                                      "required": true
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "Path",
+                                  "itemTitlePath": "DisplayName",
+                                  "itemFullTitlePath": "Path",
+                                  "itemIsParent": "(IsFolder eq true)"
+                                },
+                                "browse": {
+                                  "operationId": "ListFolder_V4",
+                                  "parameters": {
+                                    "dataset": {
+                                      "parameterReference": "dataset",
+                                      "required": true
+                                    },
+                                    "id": {
+                                      "selectedItemValuePath": "Id"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "Path",
+                                  "itemTitlePath": "DisplayName",
+                                  "itemFullTitlePath": "Path",
+                                  "itemIsParent": "(IsFolder eq true)"
+                                }
+                              },
+                              "description": "Specify folder path to upload.",
+                              "x-ms-property-name-alias": "folderPath"
+                            },
+                            "name": {
+                              "type": "string",
+                              "title": "Blob name",
+                              "description": "Specify name of the blob to create.",
+                              "x-ms-property-name-alias": "name"
+                            },
+                            "body": {
+                              "type": "string",
+                              "title": "Blob content",
+                              "format": "binary",
+                              "description": "Specify the content of the blob to upload.",
+                              "x-ms-property-name-alias": "body"
+                            },
+                            "Content-Type": {
+                              "type": "string",
+                              "title": "Content-Type",
+                              "description": "Specify content-type of the blob to upload.",
+                              "x-ms-visibility": "advanced",
+                              "x-ms-property-name-alias": "Content-Type"
+                            }
+                          },
+                          "required": [
+                            "body",
+                            "dataset",
+                            "folderPath",
+                            "name"
+                          ]
+                        },
+                        "connectionName": "shared_azureblob",
+                        "parameters": {
+                          "dataset": "AccountNameFromSettings",
+                          "folderPath": "disruption-images/",
+                          "name": "@triggerOutputs()?['body/file/name']",
+                          "body": "@triggerOutputs()?['body/file']"
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "properties": {
+                              "body": {
+                                "type": "object",
+                                "properties": {
+                                  "Id": {
+                                    "type": "string",
+                                    "description": "The unique id of the file or folder.",
+                                    "x-ms-property-name-alias": "body/Id"
+                                  },
+                                  "Name": {
+                                    "type": "string",
+                                    "description": "The name of the file or folder.",
+                                    "x-ms-property-name-alias": "body/Name"
+                                  },
+                                  "DisplayName": {
+                                    "type": "string",
+                                    "description": "The display name of the file or folder.",
+                                    "x-ms-property-name-alias": "body/DisplayName"
+                                  },
+                                  "Path": {
+                                    "type": "string",
+                                    "description": "The path of the file or folder.",
+                                    "x-ms-property-name-alias": "body/Path"
+                                  },
+                                  "LastModified": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "The date and time the file or folder was last modified.",
+                                    "x-ms-property-name-alias": "body/LastModified"
+                                  },
+                                  "Size": {
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "description": "The size of the file or folder.",
+                                    "x-ms-property-name-alias": "body/Size"
+                                  },
+                                  "MediaType": {
+                                    "type": "string",
+                                    "description": "The media type of the file or folder.",
+                                    "x-ms-property-name-alias": "body/MediaType"
+                                  },
+                                  "IsFolder": {
+                                    "type": "boolean",
+                                    "description": "A boolean value (true, false) to indicate whether or not the blob is a folder.",
+                                    "x-ms-property-name-alias": "body/IsFolder"
+                                  },
+                                  "ETag": {
+                                    "type": "string",
+                                    "description": "The etag of the file or folder.",
+                                    "x-ms-property-name-alias": "body/ETag"
+                                  },
+                                  "FileLocator": {
+                                    "type": "string",
+                                    "description": "The filelocator of the file or folder.",
+                                    "x-ms-property-name-alias": "body/FileLocator"
+                                  }
+                                },
+                                "required": [],
+                                "description": "Blob metadata",
+                                "x-ms-property-name-alias": "body"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "builtinFunction-4ba74a99-f6f4-49c4-a944-c1174c70dc5c",
+                    "name": "Respond to the agent",
+                    "type": "builtinFunction",
+                    "version": 1,
+                    "position": {
+                      "x": 1535,
+                      "y": 306
+                    },
+                    "data": {
+                      "config": {
+                        "operationId": "response",
+                        "operationName": "response",
+                        "displayName": "Respond to the agent",
+                        "category": "request",
+                        "categoryDisplayName": "Request",
+                        "iconUri": "",
+                        "brandColor": "",
+                        "parameters": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "title": "Status",
+                                "type": "string",
+                                "x-ms-content-hint": "TEXT",
+                                "x-ms-dynamically-added": true
+                              }
+                            },
+                            "required": [
+                              "text"
+                            ]
+                          },
+                          "body": {
+                            "text": "Image saved successfully"
+                          }
+                        },
+                        "description": "Respond to the calling agent with typed outputs.",
+                        "kind": "Skills"
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "description": "Function output"
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  },
+                  {
+                    "id": "connector-8a77e6ff-6592-41a2-babe-ade7c60c8a0b",
+                    "name": "Add a new row",
+                    "type": "connector",
+                    "version": 1,
+                    "position": {
+                      "x": 1851,
+                      "y": 306
+                    },
+                    "data": {
+                      "config": {
+                        "apiName": "shared_commondataserviceforapps",
+                        "displayName": "Microsoft Dataverse",
+                        "iconUri": "https://static.powerapps.com/resource/ppcr/releases/v1.0.1835/1.0.1835.5113/commondataserviceforapps/icon.png",
+                        "brandColor": "",
+                        "operationName": "CreateRecord",
+                        "operationType": "OpenApiConnection",
+                        "parametersSchema": {
+                          "type": "object",
+                          "properties": {
+                            "x-ms-odata-metadata-full": {
+                              "type": "boolean",
+                              "title": "Return Full Metadata",
+                              "description": "The header parameter to customer to opt-in returning full odata metadata in response.",
+                              "x-ms-visibility": "advanced",
+                              "x-ms-property-name-alias": "x-ms-odata-metadata-full"
+                            },
+                            "entityName": {
+                              "type": "string",
+                              "title": "Table name",
+                              "x-ms-dynamic-list": {
+                                "operationId": "GetEntities",
+                                "parameters": {},
+                                "itemsPath": "value",
+                                "itemValuePath": "EntitySetName",
+                                "itemTitlePath": "DisplayCollectionName/UserLocalizedLabel/Label"
+                              },
+                              "description": "Choose a table",
+                              "minLength": 1,
+                              "x-ms-property-name-alias": "entityName"
+                            },
+                            "item": {
+                              "type": "object",
+                              "title": "Row Item",
+                              "x-ms-dynamic-properties": {
+                                "operationId": "GetMetadataForPostEntity",
+                                "parameters": {
+                                  "entityName": {
+                                    "parameterReference": "entityName",
+                                    "required": true
+                                  }
+                                },
+                                "itemValuePath": "schema"
+                              },
+                              "description": "Row to create",
+                              "x-ms-property-name-alias": "item"
+                            }
+                          },
+                          "required": [
+                            "entityName",
+                            "item"
+                          ]
+                        },
+                        "connectionName": "shared_commondataserviceforapps",
+                        "parameters": {
+                          "entityName": "f26c_attachmentblobs",
+                          "item/f26c_attachmentblobid": "@variables('guid')",
+                          "item/f26c_blobid": "@variables('guid')",
+                          "item/f26c_id": "@triggerOutputs()?['body/text']"
+                        },
+                        "resolvedDynamicSchemas": {
+                          "item": {
+                            "type": "object",
+                            "properties": {
+                              "f26c_attachmentblobid": {
+                                "type": "string",
+                                "title": "AttachmentBlob",
+                                "format": "guid",
+                                "description": "Unique identifier for entity instances",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "f26c_attachmentblobid"
+                              },
+                              "f26c_blobid": {
+                                "type": "string",
+                                "title": "BlobId",
+                                "description": "Id of the blob",
+                                "maxLength": 850,
+                                "x-ms-visibility": "important",
+                                "x-ms-property-name-alias": "f26c_blobid"
+                              },
+                              "f26c_id": {
+                                "type": "string",
+                                "title": "Id",
+                                "description": "Ticket ID",
+                                "maxLength": 100,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "f26c_id"
+                              },
+                              "importsequencenumber": {
+                                "type": "integer",
+                                "title": "Import Sequence Number",
+                                "format": "int32",
+                                "description": "Sequence number of the import that created this record.",
+                                "maximum": 2147483647,
+                                "minimum": -2147483648,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "importsequencenumber"
+                              },
+                              "ownerid@odata.bind": {
+                                "type": "string",
+                                "title": "Owner (Owners)",
+                                "description": "Owner Id",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "ownerid@odata.bind"
+                              },
+                              "overriddencreatedon": {
+                                "type": "string",
+                                "title": "Record Created On",
+                                "format": "date-time",
+                                "description": "Date and time that the record was migrated.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "overriddencreatedon"
+                              },
+                              "statuscode": {
+                                "type": "integer",
+                                "title": "Status Reason",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "d53b8d88-6ce1-4e02-b751-cb3fc4afa404"
+                                    },
+                                    "type": {
+                                      "value": "Status"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "Reason for the status of the AttachmentBlob",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "statuscode"
+                              },
+                              "timezoneruleversionnumber": {
+                                "type": "integer",
+                                "title": "Time Zone Rule Version Number",
+                                "format": "int32",
+                                "description": "For internal use only.",
+                                "maximum": 2147483647,
+                                "minimum": -1,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "timezoneruleversionnumber"
+                              },
+                              "utcconversiontimezonecode": {
+                                "type": "integer",
+                                "title": "UTC Conversion Time Zone Code",
+                                "format": "int32",
+                                "description": "Time zone code that was in use when the record was created.",
+                                "maximum": 2147483647,
+                                "minimum": -1,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "utcconversiontimezonecode"
+                              }
+                            },
+                            "required": [
+                              "f26c_blobid"
+                            ]
+                          }
+                        }
+                      },
+                      "outcomes": [
+                        {
+                          "id": "default",
+                          "label": "Default",
+                          "outcomeSchema": {
+                            "type": "object",
+                            "properties": {
+                              "f26c_attachmentblobid": {
+                                "type": "string",
+                                "title": "AttachmentBlob",
+                                "format": "guid",
+                                "description": "Unique identifier for entity instances",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/f26c_attachmentblobid"
+                              },
+                              "f26c_blobid": {
+                                "type": "string",
+                                "title": "BlobId",
+                                "description": "Id of the blob",
+                                "maxLength": 850,
+                                "x-ms-visibility": "important",
+                                "x-ms-property-name-alias": "body/f26c_blobid"
+                              },
+                              "_createdonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Created By (Delegate) (Type)",
+                                "description": "Unique identifier of the delegate user who created the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_createdonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_createdonbehalfby_value": {
+                                "type": "string",
+                                "title": "Created By (Delegate) (Value)",
+                                "description": "Unique identifier of the delegate user who created the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_createdonbehalfby_value"
+                              },
+                              "_createdby_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Created By (Type)",
+                                "description": "Unique identifier of the user who created the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_createdby_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_createdby_value": {
+                                "type": "string",
+                                "title": "Created By (Value)",
+                                "description": "Unique identifier of the user who created the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_createdby_value"
+                              },
+                              "createdon": {
+                                "type": "string",
+                                "title": "Created On",
+                                "format": "date-time",
+                                "description": "Date and time when the record was created.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/createdon"
+                              },
+                              "f26c_id": {
+                                "type": "string",
+                                "title": "Id",
+                                "description": "Ticket ID",
+                                "maxLength": 100,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/f26c_id"
+                              },
+                              "importsequencenumber": {
+                                "type": "integer",
+                                "title": "Import Sequence Number",
+                                "format": "int32",
+                                "description": "Sequence number of the import that created this record.",
+                                "maximum": 2147483647,
+                                "minimum": -2147483648,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/importsequencenumber"
+                              },
+                              "_modifiedonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Modified By (Delegate) (Type)",
+                                "description": "Unique identifier of the delegate user who modified the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_modifiedonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_modifiedonbehalfby_value": {
+                                "type": "string",
+                                "title": "Modified By (Delegate) (Value)",
+                                "description": "Unique identifier of the delegate user who modified the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_modifiedonbehalfby_value"
+                              },
+                              "_modifiedby_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Modified By (Type)",
+                                "description": "Unique identifier of the user who modified the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_modifiedby_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_modifiedby_value": {
+                                "type": "string",
+                                "title": "Modified By (Value)",
+                                "description": "Unique identifier of the user who modified the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_modifiedby_value"
+                              },
+                              "modifiedon": {
+                                "type": "string",
+                                "title": "Modified On",
+                                "format": "date-time",
+                                "description": "Date and time when the record was modified.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/modifiedon"
+                              },
+                              "@odata.id": {
+                                "type": "string",
+                                "title": "OData Id",
+                                "description": "OData row id",
+                                "x-ms-visibility": "important",
+                                "x-ms-property-name-alias": "body/@odata.id"
+                              },
+                              "_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Owner (Type)",
+                                "description": "Owner Id",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_ownerid_value": {
+                                "type": "string",
+                                "title": "Owner (Value)",
+                                "description": "Owner Id",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_ownerid_value"
+                              },
+                              "_owningbusinessunit_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Owning Business Unit (Type)",
+                                "description": "Unique identifier for the business unit that owns the record",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_owningbusinessunit_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_owningbusinessunit_value": {
+                                "type": "string",
+                                "title": "Owning Business Unit (Value)",
+                                "description": "Unique identifier for the business unit that owns the record",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_owningbusinessunit_value"
+                              },
+                              "_owningteam_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Owning Team (Type)",
+                                "description": "Unique identifier for the team that owns the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_owningteam_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_owningteam_value": {
+                                "type": "string",
+                                "title": "Owning Team (Value)",
+                                "description": "Unique identifier for the team that owns the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_owningteam_value"
+                              },
+                              "_owninguser_value@Microsoft.Dynamics.CRM.lookuplogicalname": {
+                                "type": "string",
+                                "title": "Owning User (Type)",
+                                "description": "Unique identifier for the user that owns the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_owninguser_value@Microsoft.Dynamics.CRM.lookuplogicalname"
+                              },
+                              "_owninguser_value": {
+                                "type": "string",
+                                "title": "Owning User (Value)",
+                                "description": "Unique identifier for the user that owns the record.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/_owninguser_value"
+                              },
+                              "overriddencreatedon": {
+                                "type": "string",
+                                "title": "Record Created On",
+                                "format": "date-time",
+                                "description": "Date and time that the record was migrated.",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/overriddencreatedon"
+                              },
+                              "statecode": {
+                                "type": "integer",
+                                "title": "Status",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "cb12c593-71f3-4b88-9f8b-dc597fb05321"
+                                    },
+                                    "type": {
+                                      "value": "State"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "Status of the AttachmentBlob",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/statecode"
+                              },
+                              "statuscode": {
+                                "type": "integer",
+                                "title": "Status Reason",
+                                "x-ms-dynamic-list": {
+                                  "operationId": "GetOptionSetMetadataWithEntitySetName",
+                                  "parameters": {
+                                    "entityName": {
+                                      "parameterReference": "entityName",
+                                      "required": true
+                                    },
+                                    "attributeMetadataId": {
+                                      "value": "d53b8d88-6ce1-4e02-b751-cb3fc4afa404"
+                                    },
+                                    "type": {
+                                      "value": "Status"
+                                    }
+                                  },
+                                  "itemsPath": "value",
+                                  "itemValuePath": "value",
+                                  "itemTitlePath": "Label/UserLocalizedLabel/Label"
+                                },
+                                "format": "int32",
+                                "description": "Reason for the status of the AttachmentBlob",
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/statuscode"
+                              },
+                              "timezoneruleversionnumber": {
+                                "type": "integer",
+                                "title": "Time Zone Rule Version Number",
+                                "format": "int32",
+                                "description": "For internal use only.",
+                                "maximum": 2147483647,
+                                "minimum": -1,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/timezoneruleversionnumber"
+                              },
+                              "utcconversiontimezonecode": {
+                                "type": "integer",
+                                "title": "UTC Conversion Time Zone Code",
+                                "format": "int32",
+                                "description": "Time zone code that was in use when the record was created.",
+                                "maximum": 2147483647,
+                                "minimum": -1,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/utcconversiontimezonecode"
+                              },
+                              "versionnumber": {
+                                "type": "integer",
+                                "title": "Version Number",
+                                "format": "int64",
+                                "description": "Version Number",
+                                "maximum": 9223372036854776000,
+                                "minimum": -9223372036854776000,
+                                "x-ms-visibility": "advanced",
+                                "x-ms-property-name-alias": "body/versionnumber"
+                              }
+                            },
+                            "required": []
+                          }
+                        }
+                      ]
+                    },
+                    "measured": {
+                      "width": 240,
+                      "height": 66
+                    }
+                  }
+                ],
+                "edges": [
+                  {
+                    "id": "edge-start-30b9f7d9-4cc3-4e94-91fc-bba56c084577-variable-b288531c-ab83-4aea-b0c2-ed93b06501fd",
+                    "source": "start-30b9f7d9-4cc3-4e94-91fc-bba56c084577",
+                    "target": "variable-b288531c-ab83-4aea-b0c2-ed93b06501fd"
+                  },
+                  {
+                    "id": "edge-variable-b288531c-ab83-4aea-b0c2-ed93b06501fd-variable-42943af0-8f56-487a-bbfc-f8403712053c",
+                    "source": "variable-b288531c-ab83-4aea-b0c2-ed93b06501fd",
+                    "target": "variable-42943af0-8f56-487a-bbfc-f8403712053c"
+                  },
+                  {
+                    "id": "edge-variable-42943af0-8f56-487a-bbfc-f8403712053c-connector-6f99baf1-47ea-486a-951e-b4c790d062b0",
+                    "source": "variable-42943af0-8f56-487a-bbfc-f8403712053c",
+                    "target": "connector-6f99baf1-47ea-486a-951e-b4c790d062b0"
+                  },
+                  {
+                    "id": "edge-connector-6f99baf1-47ea-486a-951e-b4c790d062b0-builtinFunction-4ba74a99-f6f4-49c4-a944-c1174c70dc5c",
+                    "source": "connector-6f99baf1-47ea-486a-951e-b4c790d062b0",
+                    "target": "builtinFunction-4ba74a99-f6f4-49c4-a944-c1174c70dc5c"
+                  },
+                  {
+                    "id": "edge-builtinFunction-4ba74a99-f6f4-49c4-a944-c1174c70dc5c-connector-8a77e6ff-6592-41a2-babe-ade7c60c8a0b",
+                    "source": "builtinFunction-4ba74a99-f6f4-49c4-a944-c1174c70dc5c",
+                    "target": "connector-8a77e6ff-6592-41a2-babe-ade7c60c8a0b"
+                  }
+                ],
+                "connectionReferences": {
+                  "shared_azureblob": {
+                    "api": {
+                      "name": "shared_azureblob"
+                    },
+                    "connection": {
+                      "connectionReferenceLogicalName": "new_sharedazureblob_daf13e48"
+                    },
+                    "runtimeSource": "invoker",
+                    "connectionName": "shared-azureblob-ac6326e7-45af-4b12-a767-faae6f6d2c31"
+                  },
+                  "shared_commondataserviceforapps": {
+                    "api": {
+                      "name": "shared_commondataserviceforapps"
+                    },
+                    "connection": {
+                      "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_27d78949"
+                    },
+                    "runtimeSource": "invoker",
+                    "connectionName": "shared-commondataser-36235857-311c-4e11-b5d5-d73d61b380f5"
+                  }
+                }
+              },
+              "nodeActionMapping": {
+                "variable-b288531c-ab83-4aea-b0c2-ed93b06501fd": [
+                  "GUID"
+                ],
+                "variable-42943af0-8f56-487a-bbfc-f8403712053c": [
+                  "Name"
+                ],
+                "connector-6f99baf1-47ea-486a-951e-b4c790d062b0": [
+                  "Create_blob"
+                ],
+                "builtinFunction-4ba74a99-f6f4-49c4-a944-c1174c70dc5c": [
+                  "Respond_to_the_agent"
+                ],
+                "connector-8a77e6ff-6592-41a2-babe-ade7c60c8a0b": [
+                  "Add_a_new_row"
+                ]
+              },
+              "canvasOrientation": "horizontal"
+            }
+          }
+        }
+      },
+      "actions": {
+        "GUID": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "guid",
+                "type": "String",
+                "value": "@{guid()}"
+              }
+            ]
+          },
+          "metadata": {
+            "description": "GUID",
+            "nodeId": "variable-b288531c-ab83-4aea-b0c2-ed93b06501fd"
+          }
+        },
+        "Name": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "name",
+                "type": "String",
+                "value": "@{concat(variables('guid'), '.pdf')}"
+              }
+            ]
+          },
+          "runAfter": {
+            "GUID": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "Name",
+            "nodeId": "variable-42943af0-8f56-487a-bbfc-f8403712053c"
+          }
+        },
+        "Create_blob": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "AccountNameFromSettings",
+              "folderPath": "disruption-images/",
+              "name": "@triggerOutputs()?['body/file/name']",
+              "body": "@triggerOutputs()?['body/file']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_azureblob",
+              "connectionName": "shared_azureblob",
+              "operationId": "CreateFile_V2"
+            }
+          },
+          "runAfter": {
+            "Name": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "Create blob",
+            "nodeId": "connector-6f99baf1-47ea-486a-951e-b4c790d062b0"
+          }
+        },
+        "Respond_to_the_agent": {
+          "type": "Response",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "Status",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "required": [
+                "text"
+              ]
+            },
+            "statusCode": 200,
+            "body": {
+              "text": "Image saved successfully"
+            }
+          },
+          "runAfter": {
+            "Create_blob": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "Respond to the agent",
+            "nodeId": "builtinFunction-4ba74a99-f6f4-49c4-a944-c1174c70dc5c"
+          }
+        },
+        "Add_a_new_row": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_attachmentblobs",
+              "item/f26c_attachmentblobid": "@variables('guid')",
+              "item/f26c_blobid": "@variables('guid')",
+              "item/f26c_id": "@triggerOutputs()?['body/text']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "CreateRecord"
+            }
+          },
+          "runAfter": {
+            "Respond_to_the_agent": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "description": "Add a new row",
+            "nodeId": "connector-8a77e6ff-6592-41a2-babe-ade7c60c8a0b"
+          }
+        }
+      },
+      "outputs": {},
+      "metadata": {
+        "telemetryMetadata": {
+          "creationSource": "WorkflowDesigner",
+          "modifiedSources": "WorkflowDesigner"
+        },
+        "defaultToEmbeddedConnections": true
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}
