@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ImportExportXml version="9.2.26094.166" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26094.166" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26102.00147">
+<ImportExportXml version="9.2.26084.171" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26084.171" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26102.00147">
   <SolutionManifest>
     <UniqueName>F26Capstone</UniqueName>
     <LocalizedNames>
@@ -87,7 +87,6 @@
       <RootComponent type="1" schemaName="f26c_ticket" behavior="0" />
       <RootComponent type="1" schemaName="f26c_ticketupdate" behavior="0" />
       <RootComponent type="29" id="{04629789-67bb-f111-aaad-000d3a3077fd}" behavior="0" />
-      <RootComponent type="29" id="{06e749c7-6a0b-e2f3-cd24-f21caeeb1260}" behavior="0" />
       <RootComponent type="29" id="{34f1d7e1-88c9-f111-aaaf-70a8a59b49cc}" behavior="0" />
       <RootComponent type="29" id="{6104d89b-87d4-f111-a05a-000d3a30d52e}" behavior="0" />
       <RootComponent type="29" id="{c6a2df6a-94d4-f111-a05a-000d3a30d52e}" behavior="0" />
@@ -99,15 +98,6 @@
       <RootComponent type="9" schemaName="f26c_open" behavior="0" />
       <RootComponent type="9" schemaName="f26c_status" behavior="0" />
     </RootComponents>
-    <MissingDependencies>
-      <MissingDependency>
-        <Required type="connectionreference" displayName="new_sharedazureblob_daf13e48" solution="Active" id.connectionreferencelogicalname="new_sharedazureblob_daf13e48" />
-        <Dependent type="29" displayName="Make Blob" id="{06e749c7-6a0b-e2f3-cd24-f21caeeb1260}" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="connectionreference" displayName="new_sharedcommondataserviceforapps_27d78949" solution="Active" id.connectionreferencelogicalname="new_sharedcommondataserviceforapps_27d78949" />
-        <Dependent type="29" displayName="Make Blob" id="{06e749c7-6a0b-e2f3-cd24-f21caeeb1260}" />
-      </MissingDependency>
-    </MissingDependencies>
+    <MissingDependencies />
   </SolutionManifest>
 </ImportExportXml>

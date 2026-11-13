@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ImportExportXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26094.166" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26102.00147">
+<ImportExportXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26084.171" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26102.00147">
   <Entities />
   <Roles />
   <Workflows />
@@ -14,18 +14,10 @@
   <EntityDataProviders />
   <CanvasApps />
   <connectionreferences>
-    <connectionreference connectionreferencelogicalname="f26c_sharedcommondataserviceforapps_3b580">
-      <connectionreferencedisplayname>Microsoft Dataverse F26Capstone-3b580</connectionreferencedisplayname>
+    <connectionreference connectionreferencelogicalname="cr36f_phil_eB7BM0.cr.shared_commondataserviceforapps.99645add-b9a7-436f-b170-61b1e4c789c2">
+      <connectionreferencedisplayname>cr36f_phil_eB7BM0.cr.shared_commondataserviceforapps.99645add-b9a7-436f-b170-61b1e4c789c2</connectionreferencedisplayname>
       <connectorid>/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps</connectorid>
-      <iscustomizable>1</iscustomizable>
-      <promptingbehavior>0</promptingbehavior>
-      <statecode>0</statecode>
-      <statuscode>1</statuscode>
-    </connectionreference>
-    <connectionreference connectionreferencelogicalname="f26c_sharedcommondataserviceforapps_5c0a1">
-      <connectionreferencedisplayname>Microsoft Dataverse F26Capstone-5c0a1</connectionreferencedisplayname>
-      <connectorid>/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps</connectorid>
-      <iscustomizable>1</iscustomizable>
+      <iscustomizable>0</iscustomizable>
       <promptingbehavior>0</promptingbehavior>
       <statecode>0</statecode>
       <statuscode>1</statuscode>
@@ -33,38 +25,6 @@
     <connectionreference connectionreferencelogicalname="f26c_sharedcommondataserviceforapps_a1cfc">
       <connectionreferencedisplayname>Microsoft Dataverse F26Capstone-a1cfc</connectionreferencedisplayname>
       <connectorid>/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps</connectorid>
-      <iscustomizable>1</iscustomizable>
-      <promptingbehavior>0</promptingbehavior>
-      <statecode>0</statecode>
-      <statuscode>1</statuscode>
-    </connectionreference>
-    <connectionreference connectionreferencelogicalname="f26c_sharedcommondataserviceforapps_e92d0">
-      <connectionreferencedisplayname>Microsoft Dataverse F26Capstone-e92d0</connectionreferencedisplayname>
-      <connectorid>/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps</connectorid>
-      <iscustomizable>1</iscustomizable>
-      <promptingbehavior>0</promptingbehavior>
-      <statecode>0</statecode>
-      <statuscode>1</statuscode>
-    </connectionreference>
-    <connectionreference connectionreferencelogicalname="f26c_sharedcommondataserviceforapps_ee0aa">
-      <connectionreferencedisplayname>Microsoft Dataverse F26Capstone-ee0aa</connectionreferencedisplayname>
-      <connectorid>/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps</connectorid>
-      <iscustomizable>1</iscustomizable>
-      <promptingbehavior>0</promptingbehavior>
-      <statecode>0</statecode>
-      <statuscode>1</statuscode>
-    </connectionreference>
-    <connectionreference connectionreferencelogicalname="f26c_sharedteams_2c945">
-      <connectionreferencedisplayname>Microsoft Teams F26Capstone-2c945</connectionreferencedisplayname>
-      <connectorid>/providers/Microsoft.PowerApps/apis/shared_teams</connectorid>
-      <iscustomizable>1</iscustomizable>
-      <promptingbehavior>0</promptingbehavior>
-      <statecode>0</statecode>
-      <statuscode>1</statuscode>
-    </connectionreference>
-    <connectionreference connectionreferencelogicalname="f26c_sharedteams_de8fc">
-      <connectionreferencedisplayname>Microsoft Teams F26Capstone-de8fc</connectionreferencedisplayname>
-      <connectorid>/providers/Microsoft.PowerApps/apis/shared_teams</connectorid>
       <iscustomizable>1</iscustomizable>
       <promptingbehavior>0</promptingbehavior>
       <statecode>0</statecode>
