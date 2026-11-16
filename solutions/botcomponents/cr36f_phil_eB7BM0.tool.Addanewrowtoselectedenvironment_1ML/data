@@ -1,5 +1,5 @@
 kind: ConnectorTool
 authMode: Invoker
-connectionReference: cr36f_phil_eB7BM0.cr.shared_commondataserviceforapps.99645add-b9a7-436f-b170-61b1e4c789c2
+connectionReference: cr36f_phil_eB7BM0.cr.shared_commondataserviceforapps.bed9a7a9-924f-4d8b-bbe3-71e98f6d20a8
 connectorId: /providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps
 operationId: CreateRecordWithOrganization
