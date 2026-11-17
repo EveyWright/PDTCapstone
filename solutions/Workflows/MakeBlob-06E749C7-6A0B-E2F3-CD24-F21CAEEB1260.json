@@ -204,8 +204,7 @@
                     "measured": {
                       "width": 240,
                       "height": 66
-                    },
-                    "selected": false
+                    }
                   },
                   {
                     "id": "variable-42943af0-8f56-487a-bbfc-f8403712053c",
@@ -261,7 +260,8 @@
                     "measured": {
                       "width": 240,
                       "height": 66
-                    }
+                    },
+                    "selected": false
                   },
                   {
                     "id": "connector-6f99baf1-47ea-486a-951e-b4c790d062b0",
@@ -372,7 +372,7 @@
                         "parameters": {
                           "dataset": "AccountNameFromSettings",
                           "folderPath": "disruption-images/",
-                          "name": "@triggerOutputs()?['body/file/name']",
+                          "name": "@variables('name')",
                           "body": "@triggerOutputs()?['body/file']"
                         }
                       },
@@ -451,7 +451,8 @@
                     "measured": {
                       "width": 240,
                       "height": 66
-                    }
+                    },
+                    "selected": true
                   },
                   {
                     "id": "builtinFunction-4ba74a99-f6f4-49c4-a944-c1174c70dc5c",
@@ -1011,6 +1012,16 @@
                     "runtimeSource": "invoker",
                     "connectionName": "shared-commondataser-36235857-311c-4e11-b5d5-d73d61b380f5"
                   }
+                },
+                "parameters": {
+                  "$authentication": {
+                    "type": "SecureObject",
+                    "defaultValue": {}
+                  },
+                  "$connections": {
+                    "type": "Object",
+                    "defaultValue": {}
+                  }
                 }
               },
               "nodeActionMapping": {
@@ -1079,7 +1090,7 @@
             "parameters": {
               "dataset": "AccountNameFromSettings",
               "folderPath": "disruption-images/",
-              "name": "@triggerOutputs()?['body/file/name']",
+              "name": "@variables('name')",
               "body": "@triggerOutputs()?['body/file']"
             },
             "host": {

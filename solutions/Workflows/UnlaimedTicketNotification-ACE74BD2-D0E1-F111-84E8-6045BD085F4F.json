@@ -1,0 +1,107 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "f26c_sharedcommondataserviceforapps_5c0a1"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_teams": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "f26c_sharedteams_de8fc"
+        },
+        "api": {
+          "name": "shared_teams"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "Recurrence": {
+          "recurrence": {
+            "frequency": "Month",
+            "interval": 1
+          },
+          "metadata": {
+            "operationMetadataId": "0399e7b6-4159-47d7-b856-72bd8db458d7"
+          },
+          "type": "Recurrence"
+        }
+      },
+      "actions": {
+        "List_rows": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "1fbca65c-cf21-4eb2-8e1f-8b1f90852f6e"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_tickets",
+              "$filter": "f26c_AssignedTo eq null"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          }
+        },
+        "Apply_to_each": {
+          "foreach": "@outputs('List_rows')?['body/value']",
+          "actions": {
+            "Post_adaptive_card_and_wait_for_a_response": {
+              "metadata": {
+                "operationMetadataId": "643ab378-c141-4adc-9459-b8dbeab97fe0"
+              },
+              "type": "OpenApiConnectionWebhook",
+              "inputs": {
+                "parameters": {
+                  "poster": "Flow bot",
+                  "location": "Group chat",
+                  "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"This Ti!\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"\", \"wrap\": true },\n{ \"type\": \"TextBlock\", \"text\": \"\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Summary of issue: \", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Est. Severity: \", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Recommended Department: \", \"wrap\": true}\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Take Ticket\", \"data\": { \"action\": \"claim\" } }\n  ]\n}",
+                  "body/body/updateMessage": "Thanks for your response!",
+                  "body/body/recipient/recipient": "19:fada0b28de584be0a632ecec0e924bc3@thread.v2"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+                  "operationId": "PostCardAndWaitForResponse",
+                  "connectionName": "shared_teams"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "List_rows": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "5c2ab9c1-13b1-4bdc-be9f-03c50b81cfa9"
+          },
+          "type": "Foreach"
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}
