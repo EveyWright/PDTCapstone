@@ -1,14 +1,14 @@
 {
   "properties": {
     "connectionReferences": {
-      "shared_azureblob-2": {
+      "shared_azureblob": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedazureblob_77298"
+        },
         "api": {
           "name": "shared_azureblob"
-        },
-        "connection": {
-          "connectionReferenceLogicalName": "new_sharedazureblob_54db228e"
-        },
-        "runtimeSource": "invoker"
+        }
       }
     },
     "definition": {
@@ -34,7 +34,7 @@
               "properties": {
                 "text": {
                   "description": "Please enter your Blob's ID",
-                  "title": "BlobID",
+                  "title": "BlobId",
                   "type": "string",
                   "x-ms-content-hint": "TEXT",
                   "x-ms-dynamically-added": true
@@ -49,6 +49,11 @@
       },
       "actions": {
         "Get_blob_content_(V2)": {
+          "runAfter": {
+            "Compose_ID": [
+              "Succeeded"
+            ]
+          },
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
@@ -59,19 +64,14 @@
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_azureblob",
               "operationId": "GetFileContent_V2",
-              "connectionName": "shared_azureblob-2"
+              "connectionName": "shared_azureblob"
             }
-          },
-          "runAfter": {
-            "Compose_ID": [
-              "Succeeded"
-            ]
           }
         },
         "Compose_ID": {
+          "runAfter": {},
           "type": "Compose",
-          "inputs": "@triggerBody()?['text']",
-          "runAfter": {}
+          "inputs": "@triggerBody()?['text']"
         }
       }
     },
