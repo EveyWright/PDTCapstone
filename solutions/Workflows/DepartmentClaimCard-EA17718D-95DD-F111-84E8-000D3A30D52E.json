@@ -1,12 +1,30 @@
 {
   "properties": {
     "connectionReferences": {
-      "shared_commondataserviceforapps": {
+      "shared_commondataserviceforapps-1": {
         "api": {
           "name": "shared_commondataserviceforapps"
         },
         "connection": {
-          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_38a62"
+          "connectionReferenceLogicalName": "f26c_sharedcommondataserviceforapps_e92d0"
+        },
+        "runtimeSource": "embedded"
+      },
+      "shared_commondataserviceforapps-2": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "f26c_sharedcommondataserviceforapps_ee0aa"
+        },
+        "runtimeSource": "embedded"
+      },
+      "shared_teams-1": {
+        "api": {
+          "name": "shared_teams"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "f26c_sharedteams_2c945"
         },
         "runtimeSource": "embedded"
       },
@@ -15,7 +33,7 @@
           "name": "shared_teams"
         },
         "connection": {
-          "connectionReferenceLogicalName": "new_sharedteams_19643"
+          "connectionReferenceLogicalName": "f26c_sharedteams_4e1a0"
         },
         "runtimeSource": "embedded"
       }
@@ -45,7 +63,7 @@
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "SubscribeWebhookTrigger",
-              "connectionName": "shared_commondataserviceforapps"
+              "connectionName": "shared_commondataserviceforapps-1"
             }
           }
         }
@@ -61,134 +79,10 @@
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "GetItem",
-              "connectionName": "shared_commondataserviceforapps"
+              "connectionName": "shared_commondataserviceforapps-1"
             }
           },
           "runAfter": {}
-        },
-        "Condition": {
-          "type": "If",
-          "expression": {
-            "and": [
-              {
-                "not": {
-                  "equals": [
-                    "@outputs('Get_new_ticket')?['body/_f26c_department_value']",
-                    ""
-                  ]
-                }
-              }
-            ]
-          },
-          "actions": {
-            "Do_until": {
-              "type": "Until",
-              "expression": "@equals(variables('isValid'),true)",
-              "limit": {
-                "count": 5,
-                "timeout": "P29D"
-              },
-              "actions": {
-                "Department_claim_card": {
-                  "type": "OpenApiConnectionWebhook",
-                  "inputs": {
-                    "parameters": {
-                      "poster": "Flow bot",
-                      "location": "Channel",
-                      "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"New issue reported!\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_id']}\", \"wrap\": true },\n{ \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_title']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Summary of issue: @{outputs('Get_new_ticket')?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Est. Severity: @{outputs('Get_new_ticket')?['body/cr36f_severitylmh']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Recommended Department: @{outputs('Get_department')?['body/f26c_name']}\", \"wrap\": true}\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Take Ticket\", \"data\": { \"action\": \"claim\" } }\n  ]\n}",
-                      "body/body/updateMessage": "@{outputs('Get_new_ticket')?['body/f26c_id']} has been claimed.",
-                      "body/body/recipient/groupId": "@outputs('Get_department')?['body/f26c_teamid']",
-                      "body/body/recipient/channelId": "@outputs('Get_department')?['body/f26c_channelid']"
-                    },
-                    "host": {
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
-                      "operationId": "PostCardAndWaitForResponse",
-                      "connectionName": "shared_teams"
-                    }
-                  },
-                  "metadata": {
-                    "operationMetadataId": "99b91fb2-d5e4-40b3-8342-144cfe4c8e9b"
-                  }
-                },
-                "Set_action": {
-                  "type": "SetVariable",
-                  "inputs": {
-                    "name": "action",
-                    "value": "@coalesce(outputs('Department_claim_card')?['body/data/action'], '')"
-                  },
-                  "runAfter": {
-                    "Department_claim_card": [
-                      "Succeeded"
-                    ]
-                  }
-                },
-                "Set_notes": {
-                  "type": "SetVariable",
-                  "inputs": {
-                    "name": "notes",
-                    "value": "@coalesce(outputs('Department_claim_card')?['body/data/notes'], '')"
-                  },
-                  "runAfter": {
-                    "Set_action": [
-                      "Succeeded"
-                    ]
-                  }
-                },
-                "Set_isValid": {
-                  "type": "SetVariable",
-                  "inputs": {
-                    "name": "isValid",
-                    "value": "@or(equals(variables('action'), 'claim'), not(empty(trim(variables('notes')))))"
-                  },
-                  "runAfter": {
-                    "Set_notes": [
-                      "Succeeded"
-                    ]
-                  }
-                },
-                "Set_errorMessage": {
-                  "type": "SetVariable",
-                  "inputs": {
-                    "name": "errorMessage",
-                    "value": "@if(variables('isValid'), '', 'Please explain in the notes why you are skipping this ticket.')"
-                  },
-                  "runAfter": {
-                    "Set_isValid": [
-                      "Succeeded"
-                    ]
-                  }
-                }
-              }
-            }
-          },
-          "else": {
-            "actions": {
-              "Set_needsFallback": {
-                "type": "SetVariable",
-                "inputs": {
-                  "name": "needsFallback",
-                  "value": true
-                }
-              },
-              "Set_reasonText": {
-                "type": "SetVariable",
-                "inputs": {
-                  "name": "reasonText",
-                  "value": "Could not determine"
-                },
-                "runAfter": {
-                  "Set_needsFallback": [
-                    "Succeeded"
-                  ]
-                }
-              }
-            }
-          },
-          "runAfter": {
-            "Get_department": [
-              "Succeeded"
-            ]
-          }
         },
         "Initialize_reasonText": {
           "type": "InitializeVariable",
@@ -233,11 +127,11 @@
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "GetItem",
-              "connectionName": "shared_commondataserviceforapps"
+              "connectionName": "shared_commondataserviceforapps-1"
             }
           },
           "runAfter": {
-            "Initialize_errorMessage": [
+            "Initialize_skipperName": [
               "Succeeded"
             ]
           }
@@ -307,124 +201,1073 @@
             ]
           }
         },
-        "claim_or_skip": {
+        "fallback_check": {
           "type": "If",
           "expression": {
             "and": [
               {
-                "equals": [
-                  "@variables('action')",
-                  "claim"
-                ]
+                "not": {
+                  "equals": [
+                    "@variables('needsFallback')",
+                    true
+                  ]
+                }
               }
             ]
           },
           "actions": {
-            "List_employees": {
+            "Update_a_tickets_status_and_update_who_has_taken_the_ticket_3": {
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
-                  "entityName": "f26c_employees",
-                  "$filter": "f26c_email eq '@{outputs('Department_claim_card')?['body/responder/userPrincipalName']}'"
+                  "entityName": "f26c_tickets",
+                  "recordId": "@actions('Get_new_ticket')?['inputs']?['parameters']?['recordId']",
+                  "item/f26c_status": 751610001,
+                  "item/f26c_AssignedTo@odata.bind": "@concat('f26c_employees(', first(outputs('List_employees')?['body/value'])?['f26c_employeeid'], ')')"
                 },
                 "host": {
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
-                  "operationId": "ListRecords",
-                  "connectionName": "shared_commondataserviceforapps"
+                  "operationId": "UpdateOnlyRecord",
+                  "connectionName": "shared_commondataserviceforapps-2"
                 }
+              }
+            },
+            "Add_a_new_row_to_TicketUpdates_3": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "f26c_ticketupdates",
+                  "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_new_ticket')?['inputs']?['parameters']?['recordId'], ')')",
+                  "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', first(outputs('List_employees')?['body/value'])?['f26c_employeeid'], ')')",
+                  "item/f26c_updatedon": "@utcNow()",
+                  "item/f26c_updatetype": 751610001
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "connectionName": "shared_commondataserviceforapps-2"
+                }
+              },
+              "runAfter": {
+                "Update_a_tickets_status_and_update_who_has_taken_the_ticket_3": [
+                  "Succeeded"
+                ]
               }
             }
           },
           "else": {
             "actions": {
-              "Add_a_new_row_to_TicketUpdates": {
+              "Group_chat_claim_card": {
+                "type": "OpenApiConnectionWebhook",
+                "inputs": {
+                  "parameters": {
+                    "poster": "Flow bot",
+                    "location": "Group chat",
+                    "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"Ticket skipped by department\", \"weight\": \"Bolder\", \"size\": \"Medium\", \"color\": \"Attention\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{variables('reasonText')}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Ticket: @{outputs('Get_new_ticket')?['body/f26c_id']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_title']}\", \"weight\": \"Bolder\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Summary of issue: @{outputs('Get_new_ticket')?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Est. Severity: @{outputs('Get_new_ticket')?['body/cr36f_severitylmh']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Originally routed to: @{outputs('Get_department')?['body/f26c_name']}\", \"wrap\": true }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Take Ticket\", \"data\": { \"action\": \"claim\" } }\n  ]\n}",
+                    "body/body/updateMessage": "@{outputs('Get_new_ticket')?['body/f26c_id']} has been claimed.",
+                    "body/body/recipient/recipient": "19:fada0b28de584be0a632ecec0e924bc3@thread.v2"
+                  },
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+                    "operationId": "PostCardAndWaitForResponse",
+                    "connectionName": "shared_teams-1"
+                  }
+                },
+                "metadata": {
+                  "operationMetadataId": "99b91fb2-d5e4-40b3-8342-144cfe4c8e9b"
+                }
+              },
+              "Update_a_tickets_status_and_update_who_has_taken_the_ticket_4": {
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "parameters": {
+                    "entityName": "f26c_tickets",
+                    "recordId": "@actions('Get_new_ticket')?['inputs']?['parameters']?['recordId']",
+                    "item/f26c_status": 751610001,
+                    "item/f26c_AssignedTo@odata.bind": "@concat('f26c_employees(', first(outputs('List_employees_1')?['body/value'])?['f26c_employeeid'], ')')"
+                  },
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                    "operationId": "UpdateOnlyRecord",
+                    "connectionName": "shared_commondataserviceforapps-2"
+                  }
+                },
+                "runAfter": {
+                  "List_employees_1": [
+                    "SUCCEEDED"
+                  ]
+                }
+              },
+              "Add_a_new_row_to_TicketUpdates_4": {
                 "type": "OpenApiConnection",
                 "inputs": {
                   "parameters": {
                     "entityName": "f26c_ticketupdates",
                     "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_new_ticket')?['inputs']?['parameters']?['recordId'], ')')",
-                    "item/f26c_UpdatedBy@odata.bind": "@outputs('Department_claim_card')?['body/responder/displayName']",
+                    "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', first(outputs('List_employees_1')?['body/value'])?['f26c_employeeid'], ')')",
                     "item/f26c_updatedon": "@utcNow()",
                     "item/f26c_updatetype": 751610001
                   },
                   "host": {
                     "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                     "operationId": "CreateRecord",
-                    "connectionName": "shared_commondataserviceforapps"
+                    "connectionName": "shared_commondataserviceforapps-2"
                   }
-                }
-              },
-              "Set_reasonText_2": {
-                "type": "SetVariable",
-                "inputs": {
-                  "name": "reasonText",
-                  "value": "temp"
                 },
                 "runAfter": {
-                  "Add_a_new_row_to_TicketUpdates": [
+                  "Update_a_tickets_status_and_update_who_has_taken_the_ticket_4": [
                     "Succeeded"
                   ]
                 }
               },
-              "Set_needsFallback_2": {
+              "Set_claimerEmail_4": {
                 "type": "SetVariable",
                 "inputs": {
-                  "name": "needsFallback",
-                  "value": true
+                  "name": "claimerEmail",
+                  "value": "@outputs('Group_chat_claim_card')?['body/responder/userPrincipalName']"
                 },
                 "runAfter": {
-                  "Set_reasonText_2": [
-                    "Succeeded"
+                  "Group_chat_claim_card": [
+                    "SUCCEEDED"
+                  ]
+                }
+              },
+              "List_employees_1": {
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "parameters": {
+                    "entityName": "f26c_employees",
+                    "$filter": "f26c_email eq '@{variables('claimerEmail')}'"
+                  },
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                    "operationId": "ListRecords",
+                    "connectionName": "shared_commondataserviceforapps-1"
+                  }
+                },
+                "runAfter": {
+                  "Set_claimerEmail_4": [
+                    "SUCCEEDED"
                   ]
                 }
               }
             }
           },
           "runAfter": {
-            "Condition": [
+            "List_employees": [
               "Succeeded"
             ]
           }
         },
-        "Condition_2": {
-          "type": "If",
-          "expression": {
-            "and": [
-              {
-                "equals": [
-                  "@variables('needsFallback')",
-                  true
-                ]
-              }
-            ]
-          },
-          "actions": {
-            "Claim_card_1": {
-              "type": "OpenApiConnectionWebhook",
-              "inputs": {
-                "parameters": {
-                  "poster": "Flow bot",
-                  "location": "Group chat",
-                  "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"New issue reported!\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_id']}\", \"wrap\": true },\n{ \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_title']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Summary of issue: @{outputs('Get_new_ticket')?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Est. Severity: @{outputs('Get_new_ticket')?['body/cr36f_severitylmh']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Recommended Department: @{outputs('Get_department')?['body/f26c_name']}\", \"wrap\": true}\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Take Ticket\", \"data\": { \"action\": \"claim\" } }\n  ]\n}",
-                  "body/body/updateMessage": "@{outputs('Get_new_ticket')?['body/f26c_id']} has been claimed.",
-                  "body/body/recipient/recipient": "19:fada0b28de584be0a632ecec0e924bc3@thread.v2"
-                },
-                "host": {
-                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
-                  "operationId": "PostCardAndWaitForResponse",
-                  "connectionName": "shared_teams"
+        "Switch": {
+          "type": "Switch",
+          "expression": "@outputs('Get_department')?['body/f26c_name']",
+          "default": {
+            "actions": {
+              "Issue_Notification_group_chat_Claim_Card": {
+                "type": "OpenApiConnectionWebhook",
+                "inputs": {
+                  "parameters": {
+                    "poster": "Flow bot",
+                    "location": "Group chat",
+                    "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"New issue reported!\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_id']}\", \"wrap\": true },\n{ \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_title']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Summary of issue: @{outputs('Get_new_ticket')?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Est. Severity: @{outputs('Get_new_ticket')?['body/cr36f_severitylmh']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Recommended Department: @{outputs('Get_department')?['body/f26c_name']}\", \"wrap\": true}\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Take Ticket\", \"data\": { \"action\": \"claim\" } }\n  ]\n}",
+                    "body/body/updateMessage": "@{outputs('Get_new_ticket')?['body/f26c_id']} has been claimed.",
+                    "body/body/recipient/recipient": "19:fada0b28de584be0a632ecec0e924bc3@thread.v2"
+                  },
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+                    "operationId": "PostCardAndWaitForResponse",
+                    "connectionName": "shared_teams-1"
+                  }
                 }
               },
-              "metadata": {
-                "operationMetadataId": "99b91fb2-d5e4-40b3-8342-144cfe4c8e9b"
+              "List_employees_2": {
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "parameters": {
+                    "entityName": "f26c_employees",
+                    "$filter": "f26c_email eq '@{outputs('Issue_Notification_group_chat_Claim_Card')?['body/responder/userPrincipalName']}'",
+                    "$top": 1
+                  },
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                    "operationId": "ListRecords",
+                    "connectionName": "shared_commondataserviceforapps-2"
+                  }
+                },
+                "runAfter": {
+                  "Issue_Notification_group_chat_Claim_Card": [
+                    "Succeeded"
+                  ]
+                }
+              },
+              "Update_a_tickets_status_and_update_who_has_taken_the_ticket": {
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "parameters": {
+                    "entityName": "f26c_tickets",
+                    "recordId": "@outputs('Get_new_ticket')?['body/f26c_ticketid']",
+                    "item/f26c_status": 751610001,
+                    "item/f26c_AssignedTo@odata.bind": "@concat('f26c_employees(', first(outputs('List_employees_2')?['body/value'])?['f26c_employeeid'], ')')"
+                  },
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                    "operationId": "UpdateOnlyRecord",
+                    "connectionName": "shared_commondataserviceforapps-2"
+                  }
+                },
+                "runAfter": {
+                  "List_employees_2": [
+                    "Succeeded"
+                  ]
+                }
+              },
+              "Add_a_new_row_to_TicketUpdates_2": {
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "parameters": {
+                    "entityName": "f26c_ticketupdates",
+                    "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_new_ticket')?['inputs']?['parameters']?['recordId'], ')')",
+                    "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', first(outputs('List_employees_2')?['body/value'])?['f26c_employeeid'], ')')",
+                    "item/f26c_updatedon": "@utcNow()",
+                    "item/f26c_updatetype": 751610001
+                  },
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                    "operationId": "CreateRecord",
+                    "connectionName": "shared_commondataserviceforapps-2"
+                  }
+                },
+                "runAfter": {
+                  "Update_a_tickets_status_and_update_who_has_taken_the_ticket": [
+                    "Succeeded"
+                  ]
+                }
+              },
+              "Terminate": {
+                "type": "Terminate",
+                "inputs": {
+                  "runStatus": "Succeeded"
+                },
+                "runAfter": {
+                  "Add_a_new_row_to_TicketUpdates_2": [
+                    "Succeeded"
+                  ]
+                }
               }
             }
           },
-          "else": {
-            "actions": {}
+          "cases": {
+            "Case_S&OP": {
+              "actions": {
+                "Do_until_3": {
+                  "type": "Until",
+                  "expression": "@equals(variables('isValid'),true)",
+                  "limit": {
+                    "count": 5,
+                    "timeout": "P29D"
+                  },
+                  "actions": {
+                    "S_and_OP_claim_card": {
+                      "type": "OpenApiConnectionWebhook",
+                      "inputs": {
+                        "parameters": {
+                          "poster": "Flow bot",
+                          "location": "Channel",
+                          "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"@{variables('errorMessage')}\", \"color\": \"Attention\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"New issue reported!\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_id']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_title']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Summary of issue: @{outputs('Get_new_ticket')?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Est. Severity: @{outputs('Get_new_ticket')?['body/cr36f_severitylmh']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Recommended Department: @{outputs('Get_department')?['body/f26c_name']}\", \"wrap\": true},\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"notes\",\n      \"label\": \"Notes (required only if skipping)\",\n      \"placeholder\": \"If this isn't for your team, explain why you're skipping it and/or which department/person you think should claim this.\",\n      \"isMultiline\": true,\n      \"maxLength\": 3900\n    }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Take Ticket\", \"data\": { \"action\": \"claim\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Skip (not for our team)\", \"data\": { \"action\": \"skip\" } }\n  ]\n}",
+                          "body/body/updateMessage": "@{outputs('Get_new_ticket')?['body/f26c_id']} has been claimed.",
+                          "body/body/recipient/groupId": "edb6df0e-9338-496a-a5e7-d986a1e5a443",
+                          "body/body/recipient/channelId": "19:ABzTvV0K8wePGqxFL6U9l65DOcfSG2g6z0VJ-lmzLBk1@thread.tacv2"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+                          "operationId": "PostCardAndWaitForResponse",
+                          "connectionName": "shared_teams"
+                        }
+                      },
+                      "metadata": {
+                        "operationMetadataId": "99b91fb2-d5e4-40b3-8342-144cfe4c8e9b"
+                      }
+                    },
+                    "Set_action_3": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "action",
+                        "value": "@coalesce(outputs('S_and_OP_claim_card')?['body/data/action'], '')"
+                      },
+                      "runAfter": {
+                        "S_and_OP_claim_card": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Set_notes_3": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "notes",
+                        "value": "@coalesce(outputs('S_and_OP_claim_card')?['body/data/notes'], '')"
+                      },
+                      "runAfter": {
+                        "Set_action_3": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Set_isValid_3": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "isValid",
+                        "value": "@or(equals(variables('action'), 'claim'), not(empty(trim(variables('notes')))))"
+                      },
+                      "runAfter": {
+                        "Set_notes_3": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Set_errorMessage_3": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "errorMessage",
+                        "value": "@if(variables('isValid'), '', 'Please explain in the notes why you are skipping this ticket.')"
+                      },
+                      "runAfter": {
+                        "Set_isValid_3": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "claim_or_skip_3": {
+                  "type": "If",
+                  "expression": {
+                    "and": [
+                      {
+                        "equals": [
+                          "@variables('action')",
+                          "claim"
+                        ]
+                      }
+                    ]
+                  },
+                  "actions": {
+                    "Set_claimerEmail_3": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "claimerEmail",
+                        "value": "@outputs('S_and_OP_claim_card')?['body/responder/userPrincipalName']"
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {
+                      "Set_skipperName_3": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "skipperName",
+                          "value": "@outputs('S_and_OP_claim_card')?['body/responder/displayName']"
+                        }
+                      },
+                      "Set_reasonText_3": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "reasonText",
+                          "value": "@concat('Skipped by ', variables('skipperName'), ': ', replace(replace(variables('notes'), '\"', ''''), decodeUriComponent('%0A'), ' '))"
+                        },
+                        "runAfter": {
+                          "Add_a_new_row_to_TicketUpdates_8": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Set_needsFallback_3": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "needsFallback",
+                          "value": true
+                        },
+                        "runAfter": {
+                          "Set_reasonText_3": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Add_a_new_row_to_TicketUpdates_8": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "entityName": "f26c_ticketupdates",
+                            "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_new_ticket')?['inputs']?['parameters']?['recordId'], ')')",
+                            "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', first(outputs('Find_skipper_3')?['body/value'])?['f26c_employeeid'], ')')",
+                            "item/f26c_updatedon": "@utcNow()",
+                            "item/f26c_updatetype": 751610001,
+                            "item/f26c_updatetext": "@concat(variables('skipperName'), ' skipped: ', variables('notes'))"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "CreateRecord",
+                            "connectionName": "shared_commondataserviceforapps-1"
+                          }
+                        },
+                        "runAfter": {
+                          "Find_skipper_3": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Find_skipper_3": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "entityName": "f26c_employees",
+                            "$filter": "f26c_email eq '@{outputs('S_and_OP_claim_card')?['body/responder/userPrincipalName']}'",
+                            "$top": 1
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "ListRecords",
+                            "connectionName": "shared_commondataserviceforapps-1"
+                          }
+                        },
+                        "runAfter": {
+                          "Set_skipperName_3": [
+                            "Succeeded"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Do_until_3": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "case": "S&OP"
+            },
+            "Case_Master_Data": {
+              "actions": {
+                "Do_until": {
+                  "type": "Until",
+                  "expression": "@equals(variables('isValid'),true)",
+                  "limit": {
+                    "count": 5,
+                    "timeout": "P29D"
+                  },
+                  "actions": {
+                    "Master_Data_claim_card": {
+                      "type": "OpenApiConnectionWebhook",
+                      "inputs": {
+                        "parameters": {
+                          "poster": "Flow bot",
+                          "location": "Channel",
+                          "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"@{variables('errorMessage')}\", \"color\": \"Attention\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"New issue reported!\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_id']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_title']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Summary of issue: @{outputs('Get_new_ticket')?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Est. Severity: @{outputs('Get_new_ticket')?['body/cr36f_severitylmh']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Recommended Department: @{outputs('Get_department')?['body/f26c_name']}\", \"wrap\": true},\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"notes\",\n      \"label\": \"Notes (required only if skipping)\",\n      \"placeholder\": \"If this isn't for your team, explain why you're skipping it and/or which department/person you think should claim this.\",\n      \"isMultiline\": true,\n      \"maxLength\": 3900\n    }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Take Ticket\", \"data\": { \"action\": \"claim\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Skip (not for our team)\", \"data\": { \"action\": \"skip\" } }\n  ]\n}",
+                          "body/body/updateMessage": "@{outputs('Get_new_ticket')?['body/f26c_id']} has been claimed.",
+                          "body/body/recipient/groupId": "266b304a-f3b9-4188-a969-ba6c6fdd81d9",
+                          "body/body/recipient/channelId": "19:QxRY5BLSAGeYzqaTqMvnksSKO4yaBxEDho4GJblB6y01@thread.tacv2"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+                          "operationId": "PostCardAndWaitForResponse",
+                          "connectionName": "shared_teams"
+                        }
+                      },
+                      "metadata": {
+                        "operationMetadataId": "99b91fb2-d5e4-40b3-8342-144cfe4c8e9b"
+                      }
+                    },
+                    "Set_action": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "action",
+                        "value": "@coalesce(outputs('Master_Data_claim_card')?['body/data/action'], '')"
+                      },
+                      "runAfter": {
+                        "Master_Data_claim_card": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Set_notes": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "notes",
+                        "value": "@coalesce(outputs('Master_Data_claim_card')?['body/data/notes'], '')"
+                      },
+                      "runAfter": {
+                        "Set_action": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Set_isValid": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "isValid",
+                        "value": "@or(equals(variables('action'), 'claim'), not(empty(trim(variables('notes')))))"
+                      },
+                      "runAfter": {
+                        "Set_notes": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Set_errorMessage": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "errorMessage",
+                        "value": "@if(variables('isValid'), '', 'Please explain in the notes why you are skipping this ticket.')"
+                      },
+                      "runAfter": {
+                        "Set_isValid": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "claim_or_skip": {
+                  "type": "If",
+                  "expression": {
+                    "and": [
+                      {
+                        "equals": [
+                          "@variables('action')",
+                          "claim"
+                        ]
+                      }
+                    ]
+                  },
+                  "actions": {
+                    "Set_claimerEmail": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "claimerEmail",
+                        "value": "@outputs('Master_Data_claim_card')?['body/responder/userPrincipalName']"
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {
+                      "Add_a_new_row_to_TicketUpdates_5": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "entityName": "f26c_ticketupdates",
+                            "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_new_ticket')?['inputs']?['parameters']?['recordId'], ')')",
+                            "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', first(outputs('Find_skipper')?['body/value'])?['f26c_employeeid'], ')')",
+                            "item/f26c_updatedon": "@utcNow()",
+                            "item/f26c_updatetype": 751610001,
+                            "item/f26c_updatetext": "@concat(variables('skipperName'), ' skipped: ', variables('notes'))"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "CreateRecord",
+                            "connectionName": "shared_commondataserviceforapps-1"
+                          }
+                        },
+                        "runAfter": {
+                          "Find_skipper": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Set_reasonText": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "reasonText",
+                          "value": "@concat('Skipped by ', variables('skipperName'), ': ', replace(replace(variables('notes'), '\"', ''''), decodeUriComponent('%0A'), ' '))"
+                        },
+                        "runAfter": {
+                          "Add_a_new_row_to_TicketUpdates_5": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Set_needsFallback": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "needsFallback",
+                          "value": true
+                        },
+                        "runAfter": {
+                          "Set_reasonText": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Set_skipperName": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "skipperName",
+                          "value": "@outputs('Master_Data_claim_card')?['body/responder/displayName']"
+                        }
+                      },
+                      "Find_skipper": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "entityName": "f26c_employees",
+                            "$filter": "f26c_email eq '@{outputs('Master_Data_claim_card')?['body/responder/userPrincipalName']}'",
+                            "$top": 1
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "ListRecords",
+                            "connectionName": "shared_commondataserviceforapps-1"
+                          }
+                        },
+                        "runAfter": {
+                          "Set_skipperName": [
+                            "Succeeded"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Do_until": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "case": "Master Data"
+            },
+            "Case_Supply_Planning": {
+              "actions": {
+                "Do_until_1": {
+                  "type": "Until",
+                  "expression": "@equals(variables('isValid'),true)",
+                  "limit": {
+                    "count": 5,
+                    "timeout": "P29D"
+                  },
+                  "actions": {
+                    "Supply_Planning_claim_card": {
+                      "type": "OpenApiConnectionWebhook",
+                      "inputs": {
+                        "parameters": {
+                          "poster": "Flow bot",
+                          "location": "Channel",
+                          "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"@{variables('errorMessage')}\", \"color\": \"Attention\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"New issue reported!\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_id']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_title']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Summary of issue: @{outputs('Get_new_ticket')?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Est. Severity: @{outputs('Get_new_ticket')?['body/cr36f_severitylmh']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Recommended Department: @{outputs('Get_department')?['body/f26c_name']}\", \"wrap\": true},\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"notes\",\n      \"label\": \"Notes (required only if skipping)\",\n      \"placeholder\": \"If this isn't for your team, explain why you're skipping it and/or which department/person you think should claim this.\",\n      \"isMultiline\": true,\n      \"maxLength\": 3900\n    }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Take Ticket\", \"data\": { \"action\": \"claim\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Skip (not for our team)\", \"data\": { \"action\": \"skip\" } }\n  ]\n}",
+                          "body/body/updateMessage": "@{outputs('Get_new_ticket')?['body/f26c_id']} has been claimed.",
+                          "body/body/recipient/groupId": "ac60e517-ee35-4757-8f5a-65b1624f3eee",
+                          "body/body/recipient/channelId": "19:u7a-WLx2qUqP81CNVpa7V4sUk3NxQ-C17WX0ycIyHhE1@thread.tacv2"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+                          "operationId": "PostCardAndWaitForResponse",
+                          "connectionName": "shared_teams"
+                        }
+                      },
+                      "metadata": {
+                        "operationMetadataId": "99b91fb2-d5e4-40b3-8342-144cfe4c8e9b"
+                      }
+                    },
+                    "Set_action_1": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "action",
+                        "value": "@coalesce(outputs('Supply_Planning_claim_card')?['body/data/action'], '')"
+                      },
+                      "runAfter": {
+                        "Supply_Planning_claim_card": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Set_notes_1": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "notes",
+                        "value": "@coalesce(outputs('Supply_Planning_claim_card')?['body/data/notes'], '')"
+                      },
+                      "runAfter": {
+                        "Set_action_1": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Set_isValid_1": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "isValid",
+                        "value": "@or(equals(variables('action'), 'claim'), not(empty(trim(variables('notes')))))"
+                      },
+                      "runAfter": {
+                        "Set_notes_1": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Set_errorMessage_1": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "errorMessage",
+                        "value": "@if(variables('isValid'), '', 'Please explain in the notes why you are skipping this ticket.')"
+                      },
+                      "runAfter": {
+                        "Set_isValid_1": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "claim_or_skip_1": {
+                  "type": "If",
+                  "expression": {
+                    "and": [
+                      {
+                        "equals": [
+                          "@variables('action')",
+                          "claim"
+                        ]
+                      }
+                    ]
+                  },
+                  "actions": {
+                    "Set_claimerEmail_1": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "claimerEmail",
+                        "value": "@outputs('Supply_Planning_claim_card')?['body/responder/userPrincipalName']"
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {
+                      "Set_skipperName_1": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "skipperName",
+                          "value": "@outputs('Supply_Planning_claim_card')?['body/responder/displayName']"
+                        }
+                      },
+                      "Set_reasonText_1": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "reasonText",
+                          "value": "@concat('Skipped by ', variables('skipperName'), ': ', replace(replace(variables('notes'), '\"', ''''), decodeUriComponent('%0A'), ' '))"
+                        },
+                        "runAfter": {
+                          "Add_a_new_row_to_TicketUpdates_6": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Set_needsFallback_1": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "needsFallback",
+                          "value": true
+                        },
+                        "runAfter": {
+                          "Set_reasonText_1": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Add_a_new_row_to_TicketUpdates_6": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "entityName": "f26c_ticketupdates",
+                            "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_new_ticket')?['inputs']?['parameters']?['recordId'], ')')",
+                            "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', first(outputs('Find_skipper_1')?['body/value'])?['f26c_employeeid'], ')')",
+                            "item/f26c_updatedon": "@utcNow()",
+                            "item/f26c_updatetype": 751610001,
+                            "item/f26c_updatetext": "@concat(variables('skipperName'), ' skipped: ', variables('notes'))"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "CreateRecord",
+                            "connectionName": "shared_commondataserviceforapps-1"
+                          }
+                        },
+                        "runAfter": {
+                          "Find_skipper_1": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Find_skipper_1": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "entityName": "f26c_employees",
+                            "$filter": "f26c_email eq '@{outputs('Supply_Planning_claim_card')?['body/responder/userPrincipalName']}'",
+                            "$top": 1
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "ListRecords",
+                            "connectionName": "shared_commondataserviceforapps-1"
+                          }
+                        },
+                        "runAfter": {
+                          "Set_skipperName_1": [
+                            "Succeeded"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Do_until_1": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "case": "Supply Planning"
+            },
+            "Case_Demand_Planning": {
+              "actions": {
+                "Do_until_2": {
+                  "type": "Until",
+                  "expression": "@equals(variables('isValid'),true)",
+                  "limit": {
+                    "count": 5,
+                    "timeout": "P29D"
+                  },
+                  "actions": {
+                    "Demand_Planning_claim_card": {
+                      "type": "OpenApiConnectionWebhook",
+                      "inputs": {
+                        "parameters": {
+                          "poster": "Flow bot",
+                          "location": "Channel",
+                          "body/body/messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"version\": \"1.4\",\n  \"body\": [\n    { \"type\": \"TextBlock\", \"text\": \"@{variables('errorMessage')}\", \"color\": \"Attention\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"New issue reported!\", \"weight\": \"Bolder\", \"size\": \"Medium\" },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_id']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"@{outputs('Get_new_ticket')?['body/f26c_title']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Summary of issue: @{outputs('Get_new_ticket')?['body/f26c_summary']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Est. Severity: @{outputs('Get_new_ticket')?['body/cr36f_severitylmh']}\", \"wrap\": true },\n    { \"type\": \"TextBlock\", \"text\": \"Recommended Department: @{outputs('Get_department')?['body/f26c_name']}\", \"wrap\": true},\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"notes\",\n      \"label\": \"Notes (required only if skipping)\",\n      \"placeholder\": \"If this isn't for your team, explain why you're skipping it and/or which department/person you think should claim this.\",\n      \"isMultiline\": true,\n      \"maxLength\": 3900\n    }\n  ],\n  \"actions\": [\n    { \"type\": \"Action.Submit\", \"title\": \"Take Ticket\", \"data\": { \"action\": \"claim\" } },\n    { \"type\": \"Action.Submit\", \"title\": \"Skip (not for our team)\", \"data\": { \"action\": \"skip\" } }\n  ]\n}",
+                          "body/body/updateMessage": "@{outputs('Get_new_ticket')?['body/f26c_id']} has been claimed.",
+                          "body/body/recipient/groupId": "ab7cfa3d-d572-453a-8c44-dc87f2245e5e",
+                          "body/body/recipient/channelId": "19:T4tJZIy2oavK3I2W618SZkaHaXqqQNA4kdzA6FkxTiU1@thread.tacv2"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+                          "operationId": "PostCardAndWaitForResponse",
+                          "connectionName": "shared_teams"
+                        }
+                      },
+                      "metadata": {
+                        "operationMetadataId": "99b91fb2-d5e4-40b3-8342-144cfe4c8e9b"
+                      }
+                    },
+                    "Set_action_2": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "action",
+                        "value": "@coalesce(outputs('Demand_Planning_claim_card')?['body/data/action'], '')"
+                      },
+                      "runAfter": {
+                        "Demand_Planning_claim_card": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Set_notes_2": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "notes",
+                        "value": "@coalesce(outputs('Demand_Planning_claim_card')?['body/data/notes'], '')"
+                      },
+                      "runAfter": {
+                        "Set_action_2": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Set_isValid_2": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "isValid",
+                        "value": "@or(equals(variables('action'), 'claim'), not(empty(trim(variables('notes')))))"
+                      },
+                      "runAfter": {
+                        "Set_notes_2": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Set_errorMessage_2": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "errorMessage",
+                        "value": "@if(variables('isValid'), '', 'Please explain in the notes why you are skipping this ticket.')"
+                      },
+                      "runAfter": {
+                        "Set_isValid_2": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "claim_or_skip_2": {
+                  "type": "If",
+                  "expression": {
+                    "and": [
+                      {
+                        "equals": [
+                          "@variables('action')",
+                          "claim"
+                        ]
+                      }
+                    ]
+                  },
+                  "actions": {
+                    "Set_claimerEmail_2": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "claimerEmail",
+                        "value": "@outputs('Demand_Planning_claim_card')?['body/responder/userPrincipalName']"
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {
+                      "Set_skipperName_2": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "skipperName",
+                          "value": "@outputs('Demand_Planning_claim_card')?['body/responder/displayName']"
+                        }
+                      },
+                      "Set_reasonText_2": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "reasonText",
+                          "value": "@concat('Skipped by ', variables('skipperName'), ': ', replace(replace(variables('notes'), '\"', ''''), decodeUriComponent('%0A'), ' '))"
+                        },
+                        "runAfter": {
+                          "Add_a_new_row_to_TicketUpdates_7": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Set_needsFallback_2": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "needsFallback",
+                          "value": true
+                        },
+                        "runAfter": {
+                          "Set_reasonText_2": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Add_a_new_row_to_TicketUpdates_7": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "entityName": "f26c_ticketupdates",
+                            "item/f26c_TicketID@odata.bind": "@concat('f26c_tickets(', actions('Get_new_ticket')?['inputs']?['parameters']?['recordId'], ')')",
+                            "item/f26c_UpdatedBy@odata.bind": "@concat('f26c_employees(', first(outputs('Find_skipper_2')?['body/value'])?['f26c_employeeid'], ')')",
+                            "item/f26c_updatedon": "@utcNow()",
+                            "item/f26c_updatetype": 751610001,
+                            "item/f26c_updatetext": "@concat(variables('skipperName'), ' skipped: ', variables('notes'))"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "CreateRecord",
+                            "connectionName": "shared_commondataserviceforapps-1"
+                          }
+                        },
+                        "runAfter": {
+                          "Find_skipper_2": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "Find_skipper_2": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "entityName": "f26c_employees",
+                            "$filter": "f26c_email eq '@{outputs('Demand_Planning_claim_card')?['body/responder/userPrincipalName']}'",
+                            "$top": 1
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                            "operationId": "ListRecords",
+                            "connectionName": "shared_commondataserviceforapps-1"
+                          }
+                        },
+                        "runAfter": {
+                          "Set_skipperName_2": [
+                            "Succeeded"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Do_until_2": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "case": "Demand Planning"
+            }
           },
           "runAfter": {
-            "claim_or_skip": [
+            "Get_department": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_claimerEmail": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "claimerEmail",
+                "type": "string"
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_errorMessage": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_skipperName": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "skipperName",
+                "type": "string"
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_claimerEmail": [
+              "Succeeded"
+            ]
+          }
+        },
+        "List_employees": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "f26c_employees",
+              "$filter": "f26c_email eq '@{variables('claimerEmail')}'"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "connectionName": "shared_commondataserviceforapps-1"
+            }
+          },
+          "runAfter": {
+            "Switch": [
               "Succeeded"
             ]
           }
