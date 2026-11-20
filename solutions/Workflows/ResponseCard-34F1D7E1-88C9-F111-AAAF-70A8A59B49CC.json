@@ -1,19 +1,19 @@
 {
   "properties": {
     "connectionReferences": {
-      "shared_commondataserviceforapps-1": {
+      "shared_commondataserviceforapps": {
         "runtimeSource": "embedded",
         "connection": {
-          "connectionReferenceLogicalName": "f26c_sharedcommondataserviceforapps_3b580"
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_38a62"
         },
         "api": {
           "name": "shared_commondataserviceforapps"
         }
       },
-      "shared_teams-1": {
+      "shared_teams": {
         "runtimeSource": "embedded",
         "connection": {
-          "connectionReferenceLogicalName": "f26c_sharedteams_de8fc"
+          "connectionReferenceLogicalName": "new_sharedteams_19643"
         },
         "api": {
           "name": "shared_teams"
@@ -49,7 +49,7 @@
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "SubscribeWebhookTrigger",
-              "connectionName": "shared_commondataserviceforapps-1"
+              "connectionName": "shared_commondataserviceforapps"
             }
           },
           "conditions": [
@@ -94,7 +94,7 @@
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "GetItem",
-              "connectionName": "shared_commondataserviceforapps-1"
+              "connectionName": "shared_commondataserviceforapps"
             }
           }
         },
@@ -116,7 +116,7 @@
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "GetItem",
-              "connectionName": "shared_commondataserviceforapps-1"
+              "connectionName": "shared_commondataserviceforapps"
             }
           }
         },
@@ -215,7 +215,7 @@
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "ListRecords",
-              "connectionName": "shared_commondataserviceforapps-1"
+              "connectionName": "shared_commondataserviceforapps"
             }
           }
         },
@@ -255,7 +255,7 @@
                 "host": {
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
                   "operationId": "PostCardAndWaitForResponse",
-                  "connectionName": "shared_teams-1"
+                  "connectionName": "shared_teams"
                 }
               }
             },
@@ -335,7 +335,7 @@
                         "host": {
                           "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                           "operationId": "CreateRecord",
-                          "connectionName": "shared_commondataserviceforapps-1"
+                          "connectionName": "shared_commondataserviceforapps"
                         }
                       }
                     },
@@ -358,7 +358,7 @@
                         "host": {
                           "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                           "operationId": "ListRecords",
-                          "connectionName": "shared_commondataserviceforapps-1"
+                          "connectionName": "shared_commondataserviceforapps"
                         }
                       }
                     },
@@ -408,7 +408,7 @@
                         "host": {
                           "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                           "operationId": "UpdateOnlyRecord",
-                          "connectionName": "shared_commondataserviceforapps-1"
+                          "connectionName": "shared_commondataserviceforapps"
                         }
                       }
                     },
@@ -432,7 +432,7 @@
                         "host": {
                           "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
                           "operationId": "PostMessageToConversation",
-                          "connectionName": "shared_teams-1"
+                          "connectionName": "shared_teams"
                         }
                       }
                     }
@@ -581,7 +581,7 @@
                     "host": {
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                       "operationId": "UpdateOnlyRecord",
-                      "connectionName": "shared_commondataserviceforapps-1"
+                      "connectionName": "shared_commondataserviceforapps"
                     }
                   }
                 },
@@ -607,7 +607,7 @@
                     "host": {
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                       "operationId": "CreateRecord",
-                      "connectionName": "shared_commondataserviceforapps-1"
+                      "connectionName": "shared_commondataserviceforapps"
                     }
                   }
                 },
@@ -631,7 +631,7 @@
                     "host": {
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
                       "operationId": "PostMessageToConversation",
-                      "connectionName": "shared_teams-1"
+                      "connectionName": "shared_teams"
                     }
                   }
                 }
@@ -655,7 +655,7 @@
                     "host": {
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                       "operationId": "UpdateOnlyRecord",
-                      "connectionName": "shared_commondataserviceforapps-1"
+                      "connectionName": "shared_commondataserviceforapps"
                     }
                   }
                 },
@@ -681,7 +681,7 @@
                     "host": {
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                       "operationId": "CreateRecord",
-                      "connectionName": "shared_commondataserviceforapps-1"
+                      "connectionName": "shared_commondataserviceforapps"
                     }
                   }
                 }
@@ -703,7 +703,7 @@
                     "host": {
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                       "operationId": "GetItem",
-                      "connectionName": "shared_commondataserviceforapps-1"
+                      "connectionName": "shared_commondataserviceforapps"
                     }
                   }
                 },
@@ -727,7 +727,7 @@
                     "host": {
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
                       "operationId": "PostMessageToConversation",
-                      "connectionName": "shared_teams-1"
+                      "connectionName": "shared_teams"
                     }
                   }
                 },
@@ -750,7 +750,7 @@
                     "host": {
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                       "operationId": "ListRecords",
-                      "connectionName": "shared_commondataserviceforapps-1"
+                      "connectionName": "shared_commondataserviceforapps"
                     }
                   }
                 },
@@ -802,7 +802,7 @@
                     "host": {
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                       "operationId": "UpdateOnlyRecord",
-                      "connectionName": "shared_commondataserviceforapps-1"
+                      "connectionName": "shared_commondataserviceforapps"
                     }
                   }
                 },
@@ -828,7 +828,7 @@
                     "host": {
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
                       "operationId": "CreateRecord",
-                      "connectionName": "shared_commondataserviceforapps-1"
+                      "connectionName": "shared_commondataserviceforapps"
                     }
                   }
                 }
@@ -891,7 +891,7 @@
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
               "operationId": "ListRecords",
-              "connectionName": "shared_commondataserviceforapps-1"
+              "connectionName": "shared_commondataserviceforapps"
             }
           }
         }
