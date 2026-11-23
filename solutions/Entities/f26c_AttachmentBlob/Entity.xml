@@ -202,7 +202,7 @@
           <MaxLength>850</MaxLength>
           <Length>1700</Length>
           <displaynames>
-            <displayname description="BlobID" languagecode="1033" />
+            <displayname description="BlobId" languagecode="1033" />
           </displaynames>
           <Descriptions>
             <Description description="Id of the blob" languagecode="1033" />
@@ -242,7 +242,7 @@
           <MaxLength>100</MaxLength>
           <Length>200</Length>
           <displaynames>
-            <displayname description="ID" languagecode="1033" />
+            <displayname description="Id" languagecode="1033" />
           </displaynames>
           <Descriptions>
             <Description description="Ticket ID" languagecode="1033" />
